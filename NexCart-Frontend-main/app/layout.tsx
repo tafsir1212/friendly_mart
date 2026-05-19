@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 export const metadata: Metadata = {
-  title: "NexCart",
+  title: "Friendly Mart",
   description:
     "Modern ecommerce platform for customers, sellers, riders and admins",
 };

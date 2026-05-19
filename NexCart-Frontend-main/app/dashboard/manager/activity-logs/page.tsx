@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import api from "../../../lib/api";
 import Cookies from "js-cookie";
 
@@ -14,7 +14,7 @@ const ACTION_STYLES: Record<string, { bg: string; text: string; border: string; 
   RELEASE_PAYMENT:   { bg: "bg-cyan-500/10",   text: "text-cyan-300",   border: "border-cyan-500/20",   dot: "bg-cyan-400" },
 };
 
-const ACTION_ICONS: Record<string, JSX.Element> = {
+const ACTION_ICONS: Record<string, ReactNode> = {
   BLOCK_CUSTOMER: (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -77,12 +77,12 @@ export default function ManagerActivityLogsPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
         <div>
           <h2 className="font-bold text-white text-2xl">Activity Logs</h2>
           <p className="mt-1 text-slate-400 text-sm">A chronological history of all manager actions.</p>
         </div>
-        <span className="bg-slate-500/20 px-3 py-1 rounded-full text-slate-300 text-sm font-semibold border border-slate-500/30">
+        <span className="bg-slate-500/20 px-3 py-1 border border-slate-500/30 rounded-full font-semibold text-slate-300 text-sm">
           {logs.length} Total Actions
         </span>
       </div>
@@ -93,7 +93,7 @@ export default function ManagerActivityLogsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search actions, targets, or details..."
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-400"
+          className="bg-white/5 px-4 py-2 border border-white/10 focus:border-blue-400 rounded-xl focus:outline-none w-full text-white text-sm placeholder-slate-500"
         />
       </div>
 
@@ -106,10 +106,10 @@ export default function ManagerActivityLogsPage() {
           Loading activity logs...
         </div>
       ) : error ? (
-        <div className="px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-300 text-sm">{error}</div>
+        <div className="bg-red-500/20 px-4 py-3 border border-red-500/30 rounded-xl text-red-300 text-sm">{error}</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 text-slate-500">
-          <svg className="w-12 h-12 mx-auto mb-3 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="py-16 text-slate-500 text-center">
+          <svg className="mx-auto mb-3 w-12 h-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
           </svg>
           No activity logs found.
@@ -117,7 +117,7 @@ export default function ManagerActivityLogsPage() {
       ) : (
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-6 top-0 bottom-0 w-px bg-white/10" />
+          <div className="top-0 bottom-0 left-6 absolute bg-white/10 w-px" />
 
           <div className="flex flex-col gap-0">
             {filtered.map((log, idx) => {
@@ -128,9 +128,9 @@ export default function ManagerActivityLogsPage() {
                 </svg>
               );
               return (
-                <div key={log.id || idx} className="flex gap-4 pl-2 pb-4">
+                <div key={log.id || idx} className="flex gap-4 pb-4 pl-2">
                   {/* Timeline Dot */}
-                  <div className="relative z-10 flex-shrink-0">
+                  <div className="z-10 relative flex-shrink-0">
                     <div className={`w-9 h-9 rounded-xl ${style.bg} border ${style.border} flex items-center justify-center ${style.text}`}>
                       {icon}
                     </div>
@@ -138,17 +138,17 @@ export default function ManagerActivityLogsPage() {
 
                   {/* Log Card */}
                   <div className={`flex-1 ${style.bg} border ${style.border} rounded-2xl px-4 py-3 hover:brightness-110 transition`}>
-                    <div className="flex items-start justify-between gap-2 flex-wrap">
+                    <div className="flex flex-wrap justify-between items-start gap-2">
                       <div>
                         <span className={`text-xs font-bold uppercase tracking-wider ${style.text}`}>
                           {(log.actionType || "ACTION").replace(/_/g, " ")}
                         </span>
-                        <p className="text-white font-medium text-sm mt-0.5">{log.targetEntity || "—"}</p>
+                        <p className="mt-0.5 font-medium text-white text-sm">{log.targetEntity || "—"}</p>
                         {log.details && (
-                          <p className="text-slate-400 text-xs mt-1">{log.details}</p>
+                          <p className="mt-1 text-slate-400 text-xs">{log.details}</p>
                         )}
                       </div>
-                      <div className="text-right flex-shrink-0">
+                      <div className="flex-shrink-0 text-right">
                         <div className="text-slate-500 text-xs">
                           {log.createdAt
                             ? new Date(log.createdAt).toLocaleDateString("en-GB", {
@@ -158,7 +158,7 @@ export default function ManagerActivityLogsPage() {
                               })
                             : "—"}
                         </div>
-                        <div className="text-slate-600 text-xs mt-0.5">
+                        <div className="mt-0.5 text-slate-600 text-xs">
                           {log.createdAt
                             ? new Date(log.createdAt).toLocaleTimeString("en-GB", {
                                 hour: "2-digit",

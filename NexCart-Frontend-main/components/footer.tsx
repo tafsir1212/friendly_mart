@@ -29,7 +29,7 @@ export default function Footer() {
         background:
           "radial-gradient(circle at top left, rgba(99,102,241,0.18), transparent 35%), radial-gradient(circle at bottom right, rgba(168,85,247,0.18), transparent 35%), #020617",
         color: "white",
-        mt: 12,
+        mt: 0, // ✅ FIXED HERE
         borderTop: "1px solid rgba(255,255,255,0.08)",
       }}
     >
@@ -107,21 +107,13 @@ export default function Footer() {
                   boxShadow: "0 20px 45px rgba(99,102,241,0.45)",
                 }}
               >
-                <StorefrontRoundedIcon
-                  sx={{
-                    fontSize: 30,
-                    color: "#fff",
-                  }}
-                />
+                <StorefrontRoundedIcon sx={{ fontSize: 30, color: "#fff" }} />
               </Box>
 
               <Box>
                 <Typography
                   sx={{
-                    fontSize: {
-                      xs: "1.8rem",
-                      md: "2rem",
-                    },
+                    fontSize: { xs: "1.8rem", md: "2rem" },
                     fontWeight: 900,
                     color: "#fff",
                     letterSpacing: "-1px",
@@ -158,14 +150,7 @@ export default function Footer() {
             </Typography>
 
             {/* FEATURES */}
-            <Box
-              sx={{
-                mt: 4,
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 1.5,
-              }}
-            >
+            <Box sx={{ mt: 4, display: "flex", flexWrap: "wrap", gap: 1.5 }}>
               <Chip
                 icon={<VerifiedRoundedIcon />}
                 label="Verified Products"
@@ -198,13 +183,7 @@ export default function Footer() {
             </Box>
 
             {/* SOCIAL */}
-            <Box
-              sx={{
-                mt: 4,
-                display: "flex",
-                gap: 1.5,
-              }}
-            >
+            <Box sx={{ mt: 4, display: "flex", gap: 1.5 }}>
               <SocialButton icon={<FacebookRoundedIcon />} />
               <SocialButton icon={<InstagramIcon />} />
               <SocialButton icon={<LinkedInIcon />} />
@@ -212,7 +191,6 @@ export default function Footer() {
             </Box>
           </Box>
 
-          {/* QUICK LINKS */}
           <FooterSection
             title="Quick Links"
             links={[
@@ -223,7 +201,6 @@ export default function Footer() {
             ]}
           />
 
-          {/* ACCOUNT */}
           <FooterSection
             title="Account"
             links={[
@@ -234,7 +211,6 @@ export default function Footer() {
             ]}
           />
 
-          {/* PLATFORM */}
           <FooterSection
             title="Platform"
             links={[
@@ -246,22 +222,14 @@ export default function Footer() {
           />
         </Box>
 
-        {/* DIVIDER */}
-        <Divider
-          sx={{
-            borderColor: "rgba(255,255,255,0.08)",
-          }}
-        />
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
 
         {/* BOTTOM */}
         <Box
           sx={{
             py: 3,
             display: "flex",
-            flexDirection: {
-              xs: "column",
-              md: "row",
-            },
+            flexDirection: { xs: "column", md: "row" },
             alignItems: "center",
             justifyContent: "space-between",
             gap: 2,
@@ -271,23 +239,13 @@ export default function Footer() {
             sx={{
               color: "rgba(255,255,255,0.45)",
               fontSize: 14,
-              textAlign: {
-                xs: "center",
-                md: "left",
-              },
+              textAlign: { xs: "center", md: "left" },
             }}
           >
             © {new Date().getFullYear()} Friendly Mart. All rights reserved.
           </Typography>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 3,
-              justifyContent: "center",
-            }}
-          >
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
             <BottomLink href="/privacy" label="Privacy Policy" />
             <BottomLink href="/terms" label="Terms & Conditions" />
             <BottomLink href="/contact" label="Contact Us" />
@@ -313,73 +271,40 @@ function FooterSection({
           mb: 2.5,
           fontSize: 15,
           color: "#fff",
-          letterSpacing: "0.4px",
         }}
       >
         {title}
       </Typography>
 
       {links.map((link) => (
-        <FooterLink
-          key={link.label}
-          href={link.href}
-          label={link.label}
-        />
+        <FooterLink key={link.label} href={link.href} label={link.label} />
       ))}
     </Box>
   );
 }
 
-function FooterLink({
-  href,
-  label,
-}: {
-  href: string;
-  label: string;
-}) {
+function FooterLink({ href, label }: { href: string; label: string }) {
   return (
     <Box
       component={Link}
       href={href}
       sx={{
         display: "flex",
-        alignItems: "center",
         justifyContent: "space-between",
         textDecoration: "none",
         color: "rgba(255,255,255,0.62)",
         py: 1,
         transition: "0.25s ease",
-
-        "&:hover": {
-          color: "#fff",
-          transform: "translateX(5px)",
-        },
+        "&:hover": { color: "#fff", transform: "translateX(5px)" },
       }}
     >
-      <Typography
-        sx={{
-          fontSize: 15,
-        }}
-      >
-        {label}
-      </Typography>
-
-      <ArrowOutwardRoundedIcon
-        sx={{
-          fontSize: 16,
-        }}
-      />
+      <Typography sx={{ fontSize: 15 }}>{label}</Typography>
+      <ArrowOutwardRoundedIcon sx={{ fontSize: 16 }} />
     </Box>
   );
 }
 
-function BottomLink({
-  href,
-  label,
-}: {
-  href: string;
-  label: string;
-}) {
+function BottomLink({ href, label }: { href: string; label: string }) {
   return (
     <Typography
       component={Link}
@@ -388,11 +313,7 @@ function BottomLink({
         textDecoration: "none",
         color: "rgba(255,255,255,0.45)",
         fontSize: 14,
-        transition: "0.2s",
-
-        "&:hover": {
-          color: "#fff",
-        },
+        "&:hover": { color: "#fff" },
       }}
     >
       {label}
@@ -400,11 +321,7 @@ function BottomLink({
   );
 }
 
-function SocialButton({
-  icon,
-}: {
-  icon: React.ReactNode;
-}) {
+function SocialButton({ icon }: { icon: React.ReactNode }) {
   return (
     <IconButton
       sx={{
@@ -414,14 +331,11 @@ function SocialButton({
         background: "rgba(255,255,255,0.06)",
         border: "1px solid rgba(255,255,255,0.08)",
         color: "#fff",
-        backdropFilter: "blur(10px)",
         transition: "0.3s ease",
-
         "&:hover": {
           transform: "translateY(-5px)",
           background:
             "linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4)",
-          boxShadow: "0 12px 30px rgba(99,102,241,0.35)",
         },
       }}
     >

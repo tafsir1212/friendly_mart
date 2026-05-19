@@ -9,6 +9,7 @@ import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
@@ -17,29 +18,30 @@ import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSetting
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
+import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 
 export default function Hero() {
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #081028 0%, #0f172a 35%, #111c44 100%)",
         position: "relative",
         overflow: "hidden",
+        background:
+          "radial-gradient(circle at top left, #172554 0%, #0f172a 40%, #020617 100%)",
       }}
     >
-      {/* Glow Effects */}
+      {/* BACKGROUND GLOW */}
       <Box
         sx={{
           position: "absolute",
           width: 500,
           height: 500,
           borderRadius: "50%",
-          background: "rgba(0, 212, 255, 0.18)",
+          background: "rgba(59,130,246,0.18)",
           filter: "blur(120px)",
-          top: -120,
-          left: -120,
+          top: -150,
+          left: -100,
         }}
       />
 
@@ -49,9 +51,9 @@ export default function Hero() {
           width: 450,
           height: 450,
           borderRadius: "50%",
-          background: "rgba(168, 85, 247, 0.18)",
+          background: "rgba(168,85,247,0.16)",
           filter: "blur(120px)",
-          bottom: -120,
+          bottom: -180,
           right: -100,
         }}
       />
@@ -67,23 +69,23 @@ export default function Hero() {
             },
             gap: 8,
             alignItems: "center",
-            py: 8,
+            py: 10,
           }}
         >
-          {/* LEFT SIDE */}
+          {/* LEFT CONTENT */}
           <Box sx={{ position: "relative", zIndex: 2 }}>
             <Chip
               icon={<AutoAwesomeRoundedIcon />}
-              label="Next Generation Ecommerce Platform"
+              label="Smart Multi Vendor Ecommerce Platform"
               sx={{
-                mb: 3,
-                px: 1.5,
-                py: 2.7,
+                mb: 4,
+                py: 2.8,
+                px: 1.2,
                 borderRadius: "999px",
-                bgcolor: "rgba(255,255,255,0.08)",
+                background: "rgba(255,255,255,0.08)",
                 color: "#fff",
-                backdropFilter: "blur(10px)",
                 border: "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: "blur(10px)",
                 fontWeight: 700,
               }}
             />
@@ -91,22 +93,22 @@ export default function Hero() {
             <Typography
               sx={{
                 fontSize: {
-                  xs: "3rem",
-                  md: "5.5rem",
+                  xs: "3.1rem",
+                  md: "5.8rem",
                 },
                 lineHeight: 1,
                 fontWeight: 900,
-                letterSpacing: "-3px",
+                letterSpacing: "-4px",
                 color: "#fff",
                 maxWidth: 760,
               }}
             >
-              Welcome to{" "}
+              Discover the Future of{" "}
               <Box
                 component="span"
                 sx={{
                   background:
-                    "linear-gradient(90deg,#38bdf8,#22c55e,#a855f7)",
+                    "linear-gradient(90deg,#38bdf8,#818cf8,#c084fc)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -117,17 +119,17 @@ export default function Hero() {
 
             <Typography
               sx={{
-                mt: 3,
+                mt: 4,
+                fontSize: "1.08rem",
                 color: "rgba(255,255,255,0.72)",
-                fontSize: "1.1rem",
                 lineHeight: 1.9,
-                maxWidth: 620,
+                maxWidth: 640,
               }}
             >
-              A modern multi-vendor ecommerce ecosystem for customers,
-              sellers, riders, and managers. Experience smarter shopping,
-              lightning-fast delivery, and powerful business management —
-              all inside one beautiful platform.
+              Friendly Mart connects customers, sellers, delivery riders,
+              and management teams into one intelligent ecommerce ecosystem.
+              Enjoy secure shopping, real-time delivery tracking, seamless
+              business operations, and powerful analytics.
             </Typography>
 
             {/* BUTTONS */}
@@ -142,46 +144,47 @@ export default function Hero() {
               <Button
                 component={Link}
                 href="/products"
-                variant="contained"
                 size="large"
+                variant="contained"
+                endIcon={<ArrowOutwardRoundedIcon />}
                 sx={{
                   px: 5,
-                  py: 1.7,
+                  py: 1.8,
                   borderRadius: "18px",
                   textTransform: "none",
-                  fontWeight: 800,
                   fontSize: 16,
+                  fontWeight: 800,
                   background:
-                    "linear-gradient(135deg,#06b6d4,#3b82f6,#8b5cf6)",
-                  boxShadow: "0 15px 40px rgba(59,130,246,0.35)",
+                    "linear-gradient(135deg,#2563eb,#4f46e5,#9333ea)",
+                  boxShadow: "0 20px 50px rgba(79,70,229,0.35)",
                 }}
               >
-                Explore Products
+                Explore Marketplace
               </Button>
 
               <Button
                 component={Link}
                 href="/seller/register"
-                variant="outlined"
                 size="large"
+                variant="outlined"
                 sx={{
                   px: 5,
-                  py: 1.7,
+                  py: 1.8,
                   borderRadius: "18px",
                   textTransform: "none",
-                  fontWeight: 700,
                   fontSize: 16,
+                  fontWeight: 700,
                   color: "#fff",
-                  borderColor: "rgba(255,255,255,0.18)",
+                  borderColor: "rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.04)",
                   backdropFilter: "blur(12px)",
-                  background: "rgba(255,255,255,0.05)",
                   "&:hover": {
-                    borderColor: "#38bdf8",
                     background: "rgba(255,255,255,0.08)",
+                    borderColor: "#60a5fa",
                   },
                 }}
               >
-                Become Seller
+                Become a Seller
               </Button>
             </Box>
 
@@ -195,45 +198,46 @@ export default function Hero() {
                   sm: "repeat(3,1fr)",
                 },
                 gap: 2,
-                maxWidth: 720,
+                maxWidth: 760,
               }}
             >
-              <StatCard value="25K+" label="Happy Customers" />
-              <StatCard value="500+" label="Trusted Sellers" />
-              <StatCard value="24/7" label="Fast Delivery" />
+              <StatCard value="30K+" label="Active Customers" />
+              <StatCard value="850+" label="Trusted Vendors" />
+              <StatCard value="99.9%" label="Fast Service" />
             </Box>
           </Box>
 
-          {/* RIGHT SIDE */}
+          {/* RIGHT CONTENT */}
           <Box sx={{ position: "relative", zIndex: 2 }}>
             <Paper
               elevation={0}
               sx={{
-                borderRadius: "32px",
                 p: 3,
+                borderRadius: "34px",
                 background: "rgba(255,255,255,0.06)",
-                backdropFilter: "blur(18px)",
                 border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 30px 80px rgba(0,0,0,0.35)",
+                backdropFilter: "blur(18px)",
+                boxShadow: "0 25px 70px rgba(0,0,0,0.4)",
               }}
             >
-              {/* TOP */}
+              {/* HEADER */}
               <Box
                 sx={{
+                  mb: 4,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  mb: 4,
+                  gap: 2,
                 }}
               >
                 <Box>
                   <Typography
                     sx={{
-                      color: "rgba(255,255,255,0.6)",
+                      color: "rgba(255,255,255,0.55)",
                       fontSize: 14,
                     }}
                   >
-                    Platform Overview
+                    Dashboard Overview
                   </Typography>
 
                   <Typography
@@ -249,17 +253,17 @@ export default function Hero() {
 
                 <Chip
                   icon={<TrendingUpRoundedIcon />}
-                  label="Live Analytics"
+                  label="Realtime"
                   sx={{
-                    bgcolor: "rgba(34,197,94,0.16)",
                     color: "#4ade80",
                     fontWeight: 800,
-                    border: "1px solid rgba(74,222,128,0.3)",
+                    background: "rgba(34,197,94,0.12)",
+                    border: "1px solid rgba(34,197,94,0.25)",
                   }}
                 />
               </Box>
 
-              {/* GRID */}
+              {/* CARDS */}
               <Box
                 sx={{
                   display: "grid",
@@ -272,34 +276,34 @@ export default function Hero() {
               >
                 <DashboardCard
                   title="Orders"
-                  value="12,480"
-                  subtitle="Growing rapidly"
-                  gradient="linear-gradient(135deg,#06b6d4,#2563eb)"
+                  value="18,240"
+                  subtitle="+24% this month"
                   icon={<ShoppingBagRoundedIcon />}
+                  gradient="linear-gradient(135deg,#2563eb,#4f46e5)"
                 />
 
                 <DashboardCard
-                  title="Sellers"
-                  value="320"
-                  subtitle="Verified stores"
-                  gradient="linear-gradient(135deg,#9333ea,#d946ef)"
+                  title="Vendors"
+                  value="540"
+                  subtitle="Verified Stores"
                   icon={<StorefrontRoundedIcon />}
+                  gradient="linear-gradient(135deg,#9333ea,#c026d3)"
                 />
 
                 <DashboardCard
                   title="Deliveries"
-                  value="2,430"
-                  subtitle="Completed today"
-                  gradient="linear-gradient(135deg,#10b981,#22c55e)"
+                  value="4,120"
+                  subtitle="Delivered Today"
                   icon={<LocalShippingRoundedIcon />}
+                  gradient="linear-gradient(135deg,#059669,#22c55e)"
                 />
 
                 <DashboardCard
                   title="Revenue"
-                  value="৳4.2M"
-                  subtitle="Monthly income"
-                  gradient="linear-gradient(135deg,#f59e0b,#f97316)"
+                  value="৳5.6M"
+                  subtitle="Monthly Growth"
                   icon={<TrendingUpRoundedIcon />}
+                  gradient="linear-gradient(135deg,#f59e0b,#ea580c)"
                 />
               </Box>
 
@@ -307,10 +311,10 @@ export default function Hero() {
               <Box
                 sx={{
                   mt: 4,
-                  borderRadius: "24px",
                   p: 3,
+                  borderRadius: "24px",
                   background:
-                    "linear-gradient(135deg,rgba(59,130,246,0.18),rgba(168,85,247,0.18))",
+                    "linear-gradient(135deg,rgba(37,99,235,0.18),rgba(147,51,234,0.18))",
                   border: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
@@ -321,7 +325,7 @@ export default function Hero() {
                     fontSize: 18,
                   }}
                 >
-                  System Roles
+                  User Access Roles
                 </Typography>
 
                 <Box
@@ -346,11 +350,14 @@ export default function Hero() {
                   />
 
                   <RoleCard
-                   icon={<ManageAccountsRoundedIcon />}
-                   label="Manager"
-                   />
+                    icon={<ManageAccountsRoundedIcon />}
+                    label="Manager"
+                  />
 
-                  <RoleCard icon={<PersonRoundedIcon />} label="Customer" />
+                  <RoleCard
+                    icon={<PersonRoundedIcon />}
+                    label="Customer"
+                  />
                 </Box>
               </Box>
             </Paper>
@@ -382,23 +389,25 @@ function DashboardCard({
         background: gradient,
         position: "relative",
         overflow: "hidden",
-        minHeight: 170,
-        boxShadow: "0 18px 40px rgba(0,0,0,0.25)",
+        minHeight: 175,
+        boxShadow: "0 18px 40px rgba(0,0,0,0.28)",
       }}
     >
       <Box
         sx={{
           position: "absolute",
-          right: -30,
-          top: -30,
           width: 120,
           height: 120,
           borderRadius: "50%",
           background: "rgba(255,255,255,0.12)",
+          top: -35,
+          right: -35,
         }}
       />
 
-      <Box sx={{ color: "white", opacity: 0.9 }}>{icon}</Box>
+      <Box sx={{ color: "#fff", opacity: 0.95 }}>
+        {icon}
+      </Box>
 
       <Typography
         sx={{
@@ -414,8 +423,8 @@ function DashboardCard({
         variant="h3"
         sx={{
           mt: 1,
-          fontWeight: 900,
           color: "#fff",
+          fontWeight: 900,
         }}
       >
         {value}
@@ -445,8 +454,8 @@ function StatCard({
     <Box
       sx={{
         p: 3,
-        borderRadius: "24px",
-        background: "rgba(255,255,255,0.06)",
+        borderRadius: "22px",
+        background: "rgba(255,255,255,0.05)",
         border: "1px solid rgba(255,255,255,0.08)",
         backdropFilter: "blur(12px)",
       }}
@@ -464,7 +473,7 @@ function StatCard({
       <Typography
         sx={{
           mt: 0.5,
-          color: "rgba(255,255,255,0.65)",
+          color: "rgba(255,255,255,0.62)",
           fontSize: 14,
         }}
       >
@@ -487,9 +496,9 @@ function RoleCard({
         py: 2.5,
         px: 2,
         borderRadius: "20px",
-        background: "rgba(255,255,255,0.08)",
-        backdropFilter: "blur(10px)",
+        background: "rgba(255,255,255,0.06)",
         border: "1px solid rgba(255,255,255,0.08)",
+        backdropFilter: "blur(10px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -497,9 +506,9 @@ function RoleCard({
         gap: 1,
         color: "#fff",
         fontWeight: 700,
-        transition: "0.3s",
+        transition: "0.3s ease",
         "&:hover": {
-          transform: "translateY(-5px)",
+          transform: "translateY(-6px)",
           background: "rgba(255,255,255,0.12)",
         },
       }}

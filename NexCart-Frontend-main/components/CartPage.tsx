@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   Tag,
   CreditCard,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function CartPage() {
@@ -22,7 +23,9 @@ export default function CartPage() {
   const handleCheckout = async () => {
     try {
       setCheckingOut(true);
+
       const token = Cookies.get("token");
+
       if (!token) {
         toast.error("Please login");
         return;
@@ -34,15 +37,24 @@ export default function CartPage() {
       const res = await axios.post(
         `http://localhost:3000/customer/orders/${customerId}`,
         { paymentMethod },
-        { headers: { Authorization: `Bearer ${token}` } },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       console.log(res.data);
+
       toast.success("Order placed successfully 🎉");
       setCartItems([]);
     } catch (error: any) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Checkout failed");
+
+      toast.error(
+        error.response?.data?.message ||
+          "Checkout failed"
+      );
     } finally {
       setCheckingOut(false);
     }
@@ -64,13 +76,21 @@ export default function CartPage() {
 
         const res = await axios.get(
           `http://localhost:3000/customer/cart/${customerId}`,
-          { headers: { Authorization: `Bearer ${token}` } },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         setCartItems(res.data);
       } catch (error: any) {
         console.log(error);
-        toast.error(error.response?.data?.message || "Failed to load cart");
+
+        toast.error(
+          error.response?.data?.message ||
+            "Failed to load cart"
+        );
       } finally {
         setLoading(false);
       }
@@ -82,10 +102,20 @@ export default function CartPage() {
   const handleRemove = async (id: number) => {
     try {
       const token = Cookies.get("token");
-      await axios.delete(`http://localhost:3000/customer/cart/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCartItems((prev) => prev.filter((item) => item.id !== id));
+
+      await axios.delete(
+        `http://localhost:3000/customer/cart/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setCartItems((prev) =>
+        prev.filter((item) => item.id !== id)
+      );
+
       toast.success("Item removed from cart");
     } catch (error) {
       console.log(error);
@@ -93,21 +123,35 @@ export default function CartPage() {
     }
   };
 
-  const updateQuantity = async (id: number, delta: number) => {
+  const updateQuantity = async (
+    id: number,
+    delta: number
+  ) => {
     try {
       const token = Cookies.get("token");
+
       const item = cartItems.find((i) => i.id === id);
+
       const newQuantity = item.quantity + delta;
+
       if (newQuantity < 1) return;
 
       await axios.patch(
         `http://localhost:3000/customer/cart/${id}`,
         { quantity: newQuantity },
-        { headers: { Authorization: `Bearer ${token}` } },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       setCartItems((prev) =>
-        prev.map((i) => (i.id === id ? { ...i, quantity: newQuantity } : i)),
+        prev.map((i) =>
+          i.id === id
+            ? { ...i, quantity: newQuantity }
+            : i
+        )
       );
     } catch (error) {
       console.log(error);
@@ -115,155 +159,278 @@ export default function CartPage() {
   };
 
   const total = cartItems.reduce(
-    (acc, item) => acc + Number(item.product.price) * Number(item.quantity),
-    0,
+    (acc, item) =>
+      acc +
+      Number(item.product.price) *
+        Number(item.quantity),
+    0
   );
 
   const paymentOptions = [
-    { value: "cash", label: "Cash on Delivery", emoji: "💵" },
-    { value: "bkash", label: "bKash", emoji: "📱" },
-    { value: "nagad", label: "Nagad", emoji: "🔴" },
-    { value: "card", label: "Card Payment", emoji: "💳" },
+    {
+      value: "cash",
+      label: "Cash",
+      emoji: "💵",
+    },
+    {
+      value: "bkash",
+      label: "bKash",
+      emoji: "📱",
+    },
+    {
+      value: "nagad",
+      label: "Nagad",
+      emoji: "🔴",
+    },
+    {
+      value: "card",
+      label: "Card",
+      emoji: "💳",
+    },
   ];
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex flex-col items-center justify-center gap-4">
-        <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-        <p className="text-slate-500 font-semibold text-lg tracking-wide">
-          Loading your cart…
+      <div className="flex flex-col justify-center items-center gap-5 bg-[#060816] min-h-screen">
+
+        <div className="border-4 border-cyan-500 border-t-transparent rounded-full w-16 h-16 animate-spin" />
+
+        <p className="font-medium text-slate-400 text-lg">
+          Loading your cart...
         </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 py-10 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* ── Header ── */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="bg-indigo-600 text-white p-3 rounded-2xl shadow-lg shadow-indigo-200">
-            <ShoppingCart size={26} />
+    <div className="bg-[#060816] px-4 py-10 min-h-screen text-white">
+
+      <div className="mx-auto max-w-7xl">
+
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-10">
+
+          <div className="bg-cyan-500/10 p-4 border border-cyan-500/20 rounded-3xl">
+            <ShoppingCart
+              size={28}
+              className="text-cyan-400"
+            />
           </div>
+
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-800 leading-tight">
-              My Cart
+            <h1 className="font-black text-white text-4xl">
+              Shopping Cart
             </h1>
-            <p className="text-slate-400 text-sm mt-0.5">
-              {cartItems.length === 0
-                ? "No items"
-                : `${cartItems.length} item${cartItems.length > 1 ? "s" : ""}`}
+
+            <p className="mt-1 text-slate-400">
+              {cartItems.length} item
+              {cartItems.length > 1 && "s"} in your cart
             </p>
           </div>
         </div>
 
-        {/* ── Empty State ── */}
+        {/* Empty */}
         {cartItems.length === 0 ? (
-          <div className="bg-white rounded-3xl shadow-sm border border-slate-100 py-20 flex flex-col items-center gap-4">
-            <div className="bg-indigo-50 p-6 rounded-full">
-              <ShoppingCart size={48} className="text-indigo-300" />
+          <div className="flex flex-col items-center bg-[#0d1325] shadow-2xl py-24 border border-white/10 rounded-[32px] text-center">
+
+            <div className="bg-cyan-500/10 mb-6 p-8 rounded-full">
+              <ShoppingCart
+                size={60}
+                className="text-cyan-400"
+              />
             </div>
-            <h2 className="text-2xl font-bold text-slate-700">
+
+            <h2 className="mb-2 font-black text-white text-3xl">
               Your cart is empty
             </h2>
-            <p className="text-slate-400 text-sm">
-              Add some products to get started.
+
+            <p className="max-w-md text-slate-400">
+              Looks like you haven’t added any
+              products yet.
             </p>
+
             <a
               href="/products"
-              className="mt-2 inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors"
+              className="bg-cyan-500 hover:bg-cyan-600 shadow-cyan-500/20 shadow-lg mt-8 px-8 py-3 rounded-2xl font-bold text-white transition-all"
             >
               Browse Products
             </a>
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-6 items-start">
-            {/* ── Cart Items ── */}
-            <div className="flex-1 flex flex-col gap-4">
+          <div className="gap-8 grid grid-cols-1 xl:grid-cols-3">
+
+            {/* Cart Items */}
+            <div className="space-y-5 xl:col-span-2">
+
               {cartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex items-center gap-4 transition-all hover:shadow-md group"
+                  className="bg-[#0d1325] hover:bg-[#11182d] shadow-xl p-5 border border-white/10 rounded-[28px] transition-all duration-300"
                 >
-                  {/* Product Image */}
-                  <div className="relative shrink-0">
-                    <img
-                      src={
-                        item.product?.productImage
-                          ? `http://localhost:3000/uploads/products/${item.product.productImage}`
-                          : "/no-image.png"
-                      }
-                      alt={item.product?.productName}
-                      className="w-24 h-24 rounded-xl object-cover bg-slate-100"
-                    />
-                  </div>
+                  <div className="flex md:flex-row flex-col gap-5">
 
-                  {/* Details */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-800 text-base truncate">
-                      {item.product?.productName}
-                    </h3>
-                    <p className="text-indigo-600 font-extrabold text-lg mt-1">
-                      $
-                      {(
-                        Number(item.product?.price) * Number(item.quantity)
-                      ).toFixed(2)}
-                    </p>
-                    <p className="text-slate-400 text-xs">
-                      ${Number(item.product?.price).toFixed(2)} each
-                    </p>
+                    {/* Image */}
+                    <div className="shrink-0">
+                      <img
+                        src={
+                          item.product?.productImage
+                            ? `http://localhost:3000/uploads/products/${item.product.productImage}`
+                            : "/no-image.png"
+                        }
+                        alt={
+                          item.product?.productName
+                        }
+                        className="border border-white/10 rounded-3xl w-32 h-32 object-cover"
+                      />
+                    </div>
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 mt-3">
-                      <button
-                        onClick={() => updateQuantity(item.id, -1)}
-                        disabled={item.quantity <= 1}
-                        className="w-8 h-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
-                      >
-                        <Minus size={14} className="text-slate-600" />
-                      </button>
-                      <span className="w-8 text-center font-bold text-slate-700 text-sm">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => updateQuantity(item.id, 1)}
-                        className="w-8 h-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center transition-colors"
-                      >
-                        <Plus size={14} className="text-slate-600" />
-                      </button>
+                    {/* Content */}
+                    <div className="flex flex-col flex-1 justify-between">
+
+                      <div>
+                        <h2 className="font-black text-white text-2xl">
+                          {
+                            item.product
+                              ?.productName
+                          }
+                        </h2>
+
+                        <p className="mt-2 text-slate-400 text-sm">
+                          Premium product added to
+                          your shopping cart
+                        </p>
+
+                        <div className="flex items-center gap-3 mt-4">
+
+                          <span className="bg-cyan-500/10 px-4 py-1 rounded-full font-bold text-cyan-400 text-sm">
+                            $
+                            {Number(
+                              item.product?.price
+                            ).toFixed(2)}
+                          </span>
+
+                          <span className="text-slate-500 text-sm">
+                            per item
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Bottom */}
+                      <div className="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-4 mt-6">
+
+                        {/* Quantity */}
+                        <div className="flex items-center bg-[#11182d] border border-white/10 rounded-2xl w-fit overflow-hidden">
+
+                          <button
+                            onClick={() =>
+                              updateQuantity(
+                                item.id,
+                                -1
+                              )
+                            }
+                            className="flex justify-center items-center hover:bg-white/5 w-12 h-12 transition-all"
+                          >
+                            <Minus
+                              size={16}
+                              className="text-white"
+                            />
+                          </button>
+
+                          <div className="w-14 font-black text-lg text-center">
+                            {item.quantity}
+                          </div>
+
+                          <button
+                            onClick={() =>
+                              updateQuantity(
+                                item.id,
+                                1
+                              )
+                            }
+                            className="flex justify-center items-center hover:bg-white/5 w-12 h-12 transition-all"
+                          >
+                            <Plus
+                              size={16}
+                              className="text-white"
+                            />
+                          </button>
+                        </div>
+
+                        {/* Price + Remove */}
+                        <div className="flex items-center gap-4">
+
+                          <div className="text-right">
+                            <p className="text-slate-400 text-xs">
+                              Total
+                            </p>
+
+                            <h3 className="font-black text-cyan-400 text-3xl">
+                              $
+                              {(
+                                Number(
+                                  item.product
+                                    ?.price
+                                ) *
+                                Number(
+                                  item.quantity
+                                )
+                              ).toFixed(2)}
+                            </h3>
+                          </div>
+
+                          <button
+                            onClick={() =>
+                              handleRemove(
+                                item.id
+                              )
+                            }
+                            className="bg-red-500/10 hover:bg-red-500/20 p-3 border border-red-500/20 rounded-2xl text-red-400 transition-all"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Remove */}
-                  <button
-                    onClick={() => handleRemove(item.id)}
-                    className="shrink-0 p-2 rounded-xl text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
-                    aria-label="Remove item"
-                  >
-                    <Trash2 size={18} />
-                  </button>
                 </div>
               ))}
             </div>
 
-            {/* ── Order Summary ── */}
-            <div className="w-full lg:w-80 shrink-0 sticky top-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col gap-5">
-                <h2 className="text-lg font-extrabold text-slate-800">
+            {/* Summary */}
+            <div className="top-6 sticky h-fit">
+
+              <div className="bg-[#0d1325] shadow-2xl p-7 border border-white/10 rounded-[32px]">
+
+                <h2 className="mb-6 font-black text-white text-2xl">
                   Order Summary
                 </h2>
 
-                {/* Line items */}
-                <div className="flex flex-col gap-2 text-sm text-slate-500 border-b border-slate-100 pb-4">
+                {/* Products */}
+                <div className="space-y-3 pb-5 border-white/10 border-b">
+
                   {cartItems.map((item) => (
-                    <div key={item.id} className="flex justify-between">
-                      <span className="truncate max-w-[160px]">
-                        {item.product?.productName} × {item.quantity}
+                    <div
+                      key={item.id}
+                      className="flex justify-between gap-4 text-sm"
+                    >
+                      <span className="text-slate-300 truncate">
+                        {
+                          item.product
+                            ?.productName
+                        }{" "}
+                        × {item.quantity}
                       </span>
-                      <span className="font-semibold text-slate-700">
+
+                      <span className="font-bold text-white">
                         $
                         {(
-                          Number(item.product?.price) * Number(item.quantity)
+                          Number(
+                            item.product
+                              ?.price
+                          ) *
+                          Number(
+                            item.quantity
+                          )
                         ).toFixed(2)}
                       </span>
                     </div>
@@ -271,57 +438,82 @@ export default function CartPage() {
                 </div>
 
                 {/* Total */}
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-slate-700 flex items-center gap-1.5">
-                    <Tag size={16} className="text-indigo-500" /> Total
-                  </span>
-                  <span className="text-2xl font-extrabold text-indigo-600">
+                <div className="flex justify-between items-center py-6">
+
+                  <div className="flex items-center gap-2 font-bold text-slate-300">
+                    <Tag
+                      size={18}
+                      className="text-cyan-400"
+                    />
+
+                    Total
+                  </div>
+
+                  <h2 className="font-black text-cyan-400 text-4xl">
                     ${total.toFixed(2)}
-                  </span>
+                  </h2>
                 </div>
 
-                {/* Payment Method */}
+                {/* Payment */}
                 <div>
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 mb-2">
-                    <CreditCard size={14} /> Payment Method
+                  <label className="flex items-center gap-2 mb-4 font-bold text-slate-300 text-sm">
+                    <CreditCard
+                      size={16}
+                      className="text-cyan-400"
+                    />
+                    Payment Method
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+
+                  <div className="gap-3 grid grid-cols-2">
+
                     {paymentOptions.map((opt) => (
                       <button
                         key={opt.value}
-                        onClick={() => setPaymentMethod(opt.value)}
-                        className={`flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-xl border text-xs font-semibold transition-all
-                          ${
-                            paymentMethod === opt.value
-                              ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm"
-                              : "border-slate-200 text-slate-500 hover:border-indigo-300 hover:bg-slate-50"
-                          }`}
+                        onClick={() =>
+                          setPaymentMethod(
+                            opt.value
+                          )
+                        }
+                        className={`rounded-2xl border p-4 text-sm font-bold transition-all
+
+                        ${
+                          paymentMethod ===
+                          opt.value
+                            ? "bg-cyan-500/10 border-cyan-500 text-cyan-400"
+                            : "bg-[#11182d] border-white/10 text-slate-300 hover:border-cyan-500/30"
+                        }`}
                       >
-                        <span className="text-lg">{opt.emoji}</span>
+                        <div className="mb-2 text-2xl">
+                          {opt.emoji}
+                        </div>
+
                         {opt.label}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Checkout Button */}
+                {/* Checkout */}
                 <button
                   onClick={handleCheckout}
                   disabled={checkingOut}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2"
+                  className="flex justify-center items-center gap-3 bg-cyan-500 hover:bg-cyan-600 disabled:opacity-60 shadow-cyan-500/20 shadow-lg mt-7 py-4 rounded-2xl w-full font-black text-white text-lg transition-all"
                 >
                   {checkingOut ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Placing Order…
+                      <div className="border-2 border-white border-t-transparent rounded-full w-5 h-5 animate-spin" />
+                      Processing...
                     </>
                   ) : (
-                    "Place Order →"
+                    <>
+                      <ShieldCheck size={20} />
+                      Place Order
+                    </>
                   )}
                 </button>
 
-                <p className="text-center text-xs text-slate-400">
-                  Secure checkout · Free returns
+                <p className="mt-5 text-slate-500 text-xs text-center">
+                  Secure checkout • 100% protected
                 </p>
               </div>
             </div>
