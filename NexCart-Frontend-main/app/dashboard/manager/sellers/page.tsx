@@ -11,11 +11,22 @@ export default function ManagerSellersPage() {
   const [actionMsg, setActionMsg] = useState<string | null>(null);
 
   const loadSellers = () => {
+    setLoading(true);
     api
       .get("/manager/sellers")
       .then((res) => setSellers(res.data))
       .catch((err) => setError(err.response?.data?.message || "Unable to load sellers."))
       .finally(() => setLoading(false));
+  };
+
+  const getStatusClasses = (status: string) => {
+    if (status === "activated") {
+      return "bg-emerald-500/10 text-emerald-300 border-emerald-500/20";
+    }
+    if (status === "blocked") {
+      return "bg-red-500/10 text-red-300 border-red-500/20";
+    }
+    return "bg-slate-500/10 text-slate-400 border-slate-500/20";
   };
 
   useEffect(() => {
@@ -32,6 +43,7 @@ export default function ManagerSellersPage() {
     try {
       await api.patch(`/manager/sellers/${id}/${action}`);
       setActionMsg(`Seller successfully ${action === "block" ? "blocked" : "activated"}.`);
+      loadSellers();
       setTimeout(() => setActionMsg(null), 3000);
     } catch (err: any) {
       setActionMsg(err.response?.data?.message || "Action failed.");
@@ -41,18 +53,18 @@ export default function ManagerSellersPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="font-bold text-white text-2xl">Sellers</h2>
           <p className="mt-1 text-slate-400 text-sm">Manage all registered sellers and their shops.</p>
         </div>
-        <span className="bg-cyan-500/20 px-3 py-1 rounded-full text-cyan-300 text-sm font-semibold border border-cyan-500/30">
+        <span className="bg-cyan-500/20 px-3 py-1 border border-cyan-500/30 rounded-full font-semibold text-cyan-300 text-sm">
           {sellers.length} Total
         </span>
       </div>
 
       {actionMsg && (
-        <div className="mb-4 px-4 py-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-300 text-sm">
+        <div className="bg-green-500/20 mb-4 px-4 py-3 border border-green-500/30 rounded-xl text-green-300 text-sm">
           {actionMsg}
         </div>
       )}
@@ -66,11 +78,11 @@ export default function ManagerSellersPage() {
           Loading sellers...
         </div>
       ) : error ? (
-        <div className="px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-300 text-sm">{error}</div>
+        <div className="bg-red-500/20 px-4 py-3 border border-red-500/30 rounded-xl text-red-300 text-sm">{error}</div>
       ) : sellers.length === 0 ? (
-        <div className="text-center py-16 text-slate-500">No sellers found.</div>
+        <div className="py-16 text-slate-500 text-center">No sellers found.</div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-white/10">
+        <div className="border border-white/10 rounded-xl overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-white/5 text-slate-400 text-left">
@@ -78,7 +90,7 @@ export default function ManagerSellersPage() {
                 <th className="px-4 py-3 font-semibold">Name</th>
                 <th className="px-4 py-3 font-semibold">Email</th>
                 <th className="px-4 py-3 font-semibold">Shop</th>
-                <th className="px-4 py-3 font-semibold">Products</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
                 <th className="px-4 py-3 font-semibold text-right">Actions</th>
               </tr>
             </thead>
@@ -86,9 +98,9 @@ export default function ManagerSellersPage() {
               {sellers.map((s) => (
                 <tr key={s.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-4 py-3 text-slate-400">#{s.id}</td>
-                  <td className="px-4 py-3 text-white font-medium">
+                  <td className="px-4 py-3 font-medium text-white">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      <div className="flex flex-shrink-0 justify-center items-center bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full w-7 h-7 font-bold text-white text-xs">
                         {(s.name || "?")[0].toUpperCase()}
                       </div>
                       {s.name || "—"}
@@ -97,21 +109,23 @@ export default function ManagerSellersPage() {
                   <td className="px-4 py-3 text-slate-300">{s.email || "—"}</td>
                   <td className="px-4 py-3 text-slate-300">{s.shop?.name || s.shopName || "—"}</td>
                   <td className="px-4 py-3">
-                    <span className="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full text-xs font-semibold border border-blue-500/20">
-                      {Array.isArray(s.products) ? s.products.length : 0} items
+                    <span className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border ${getStatusClasses(s.status)}`}>
+                      {s.status === "activated" ? "Active" : s.status === "blocked" ? "Blocked" : "Unknown"}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex justify-end items-center gap-2">
                       <button
                         onClick={() => handleAction(s.id, "block")}
-                        className="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 text-xs font-semibold transition"
+                        disabled={s.status === "blocked"}
+                        className="bg-red-500/20 hover:bg-red-500/30 disabled:opacity-50 px-3 py-1 border border-red-500/30 rounded-lg font-semibold text-red-400 text-xs transition disabled:cursor-not-allowed"
                       >
                         Block
                       </button>
                       <button
                         onClick={() => handleAction(s.id, "activate")}
-                        className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30 text-xs font-semibold transition"
+                        disabled={s.status === "activated"}
+                        className="bg-green-500/20 hover:bg-green-500/30 disabled:opacity-50 px-3 py-1 border border-green-500/30 rounded-lg font-semibold text-green-400 text-xs transition disabled:cursor-not-allowed"
                       >
                         Activate
                       </button>
