@@ -208,17 +208,29 @@ export class ManagerService {
   // =====================================
   // CUSTOMER MANAGEMENT
   // =====================================
-  async getAllCustomers(): Promise<customerEntity[]> {
-    return await this.customerRepository.find();
+  async getAllCustomers(): Promise<Array<Record<string, any>>> {
+    const customers = await this.customerRepository.find();
+    return customers.map((customer) => {
+      const { password, ...customerData } = customer;
+      return {
+        ...customerData,
+        status: customer.isBlocked ? 'blocked' : 'activated',
+      };
+    });
   }
 
-  async getCustomerById(id: number): Promise<customerEntity> {
+  async getCustomerById(id: number): Promise<Record<string, any>> {
     const customer = await this.customerRepository.findOne({
       where: { id },
       relations: ['orders'],
     });
     if (!customer) throw new NotFoundException(`Customer not found`);
-    return customer;
+
+    const { password, ...customerData } = customer;
+    return {
+      ...customerData,
+      status: customer.isBlocked ? 'blocked' : 'activated',
+    };
   }
 
   async blockCustomer(
@@ -272,19 +284,31 @@ export class ManagerService {
   // =====================================
   // SELLER MANAGEMENT
   // =====================================
-  async getAllSellers(): Promise<SellerEntity[]> {
-    return await this.sellerRepository.find({
+  async getAllSellers(): Promise<Array<Record<string, any>>> {
+    const sellers = await this.sellerRepository.find({
       relations: ['shop', 'products'],
+    });
+    return sellers.map((seller) => {
+      const { password, ...sellerData } = seller;
+      return {
+        ...sellerData,
+        status: seller.isBlocked ? 'blocked' : 'activated',
+      };
     });
   }
 
-  async getSellerById(id: number): Promise<SellerEntity> {
+  async getSellerById(id: number): Promise<Record<string, any>> {
     const seller = await this.sellerRepository.findOne({
       where: { id },
       relations: ['shop', 'products', 'orderItems'],
     });
     if (!seller) throw new NotFoundException(`Seller not found`);
-    return seller;
+
+    const { password, ...sellerData } = seller;
+    return {
+      ...sellerData,
+      status: seller.isBlocked ? 'blocked' : 'activated',
+    };
   }
 
   async blockSeller(
