@@ -10,135 +10,140 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
-import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
-import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
+// Icons
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
-import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
-import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
-import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
+import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
+import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
+import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
+import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import HubRoundedIcon from "@mui/icons-material/HubRounded";
 
-export default function Hero() {
+// Premium Dark Blue Palette
+const DARK_BLUE_COLORS = {
+  bg: "#030712",
+  bgGradientEnd: "#0B1530", // Deep navy depth
+  cardBg: "rgba(15, 23, 42, 0.65)", // Glass dark panel
+  accentCyan: "#38bdf8",
+  accentMint: "rgba(16, 185, 129, 0.15)", // Translucent mint
+  accentAmber: "rgba(245, 158, 11, 0.15)", // Translucent amber
+  mintText: "#34d399",
+  amberText: "#fbbf24",
+  text: {
+    primary: "#f9fafb",
+    secondary: "#9ca3af",
+  },
+};
+
+const backgroundPatternCss = `
+  background-color: ${DARK_BLUE_COLORS.bg};
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%27 height='100%27 viewBox='0 0 1600 800'%3E%3Cpath fill='%23ffffff04' d='M0,160 C320,320 640,0 960,160 C1280,320 1600,0 1600,0 V800 H0 Z'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-attachment: fixed;
+`;
+
+export default function HeroDarkBlueVariation() {
   return (
     <Box
       sx={{
         minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
-        background:
-          "radial-gradient(circle at top left, #172554 0%, #0f172a 40%, #020617 100%)",
+        background: `linear-gradient(180deg, ${DARK_BLUE_COLORS.bg} 0%, ${DARK_BLUE_COLORS.bgGradientEnd} 100%)`,
+        "::before": {
+          content: '""',
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+          zIndex: 1,
+          css: backgroundPatternCss,
+          pointerEvents: "none",
+        },
       }}
     >
-      {/* BACKGROUND GLOW */}
-      <Box
-        sx={{
-          position: "absolute",
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          background: "rgba(59,130,246,0.18)",
-          filter: "blur(120px)",
-          top: -150,
-          left: -100,
-        }}
-      />
-
-      <Box
-        sx={{
-          position: "absolute",
-          width: 450,
-          height: 450,
-          borderRadius: "50%",
-          background: "rgba(168,85,247,0.16)",
-          filter: "blur(120px)",
-          bottom: -180,
-          right: -100,
-        }}
-      />
-
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ position: "relative", zIndex: 3 }}>
         <Box
           sx={{
             minHeight: "100vh",
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              lg: "1.05fr 0.95fr",
+              md: "1fr 1fr",
             },
-            gap: 8,
+            gap: { xs: 6, md: 10 },
             alignItems: "center",
-            py: 10,
+            py: { xs: 8, md: 10 },
           }}
         >
           {/* LEFT CONTENT */}
-          <Box sx={{ position: "relative", zIndex: 2 }}>
+          <Box>
             <Chip
-              icon={<AutoAwesomeRoundedIcon />}
-              label="Smart Multi Vendor Ecommerce Platform"
+              icon={<HubRoundedIcon style={{ color: DARK_BLUE_COLORS.accentCyan, fontSize: "1.1rem" }} />}
+              label="Connected Commerce Hub"
               sx={{
                 mb: 4,
-                py: 2.8,
-                px: 1.2,
-                borderRadius: "999px",
-                background: "rgba(255,255,255,0.08)",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.08)",
-                backdropFilter: "blur(10px)",
-                fontWeight: 700,
+                px: 1,
+                py: 0.5,
+                borderRadius: "100px",
+                background: "rgba(255, 255, 255, 0.04)",
+                color: DARK_BLUE_COLORS.text.primary,
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                backdropFilter: "blur(8px)",
+                fontWeight: 600,
+                fontSize: "0.85rem",
               }}
             />
 
             <Typography
+              component="h1"
               sx={{
                 fontSize: {
-                  xs: "3.1rem",
-                  md: "5.8rem",
+                  xs: "2.75rem",
+                  sm: "3.5rem",
+                  lg: "4.25rem",
                 },
-                lineHeight: 1,
-                fontWeight: 900,
-                letterSpacing: "-4px",
-                color: "#fff",
-                maxWidth: 760,
+                lineHeight: 1.15,
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                color: DARK_BLUE_COLORS.text.primary,
+                maxWidth: 700,
               }}
             >
-              Discover the Future of{" "}
+              Unified Retail Management for{" "}
               <Box
                 component="span"
                 sx={{
-                  background:
-                    "linear-gradient(90deg,#38bdf8,#818cf8,#c084fc)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: DARK_BLUE_COLORS.accentCyan,
+                  position: "relative",
+                  display: "inline-block",
                 }}
               >
-                Friendly Mart
+                Modern Brands.
               </Box>
             </Typography>
 
             <Typography
               sx={{
                 mt: 4,
-                fontSize: "1.08rem",
-                color: "rgba(255,255,255,0.72)",
-                lineHeight: 1.9,
-                maxWidth: 640,
+                fontSize: "1.125rem",
+                color: DARK_BLUE_COLORS.text.secondary,
+                lineHeight: 1.8,
+                maxWidth: 600,
+                fontWeight: 400,
               }}
             >
-              Friendly Mart connects customers, sellers, delivery riders,
-              and management teams into one intelligent ecommerce ecosystem.
-              Enjoy secure shopping, real-time delivery tracking, seamless
-              business operations, and powerful analytics.
+              Friendly Mart synchronizes your entire supply chain. From local vendor onboarding to multi-channel fulfillment and powerful BI reporting, manage everything through one clean, intelligent platform.
             </Typography>
 
             {/* BUTTONS */}
             <Box
               sx={{
-                mt: 5,
+                mt: 6,
                 display: "flex",
-                flexWrap: "wrap",
-                gap: 2,
+                flexDirection: { xs: "column", sm: "row" },
+                gap: 2.5,
               }}
             >
               <Button
@@ -146,221 +151,130 @@ export default function Hero() {
                 href="/products"
                 size="large"
                 variant="contained"
-                endIcon={<ArrowOutwardRoundedIcon />}
+                endIcon={<ArrowForwardRoundedIcon />}
                 sx={{
                   px: 5,
                   py: 1.8,
-                  borderRadius: "18px",
+                  borderRadius: "16px",
                   textTransform: "none",
-                  fontSize: 16,
-                  fontWeight: 800,
-                  background:
-                    "linear-gradient(135deg,#2563eb,#4f46e5,#9333ea)",
-                  boxShadow: "0 20px 50px rgba(79,70,229,0.35)",
+                  fontSize: "1rem",
+                  fontWeight: 700,
+                  background: `linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)`,
+                  boxShadow: "0 10px 25px -5px rgba(37, 99, 235, 0.4)",
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    background: "#3b82f6",
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 15px 30px -5px rgba(37, 99, 235, 0.5)",
+                  },
                 }}
               >
-                Explore Marketplace
+                Access Platform
               </Button>
 
               <Button
                 component={Link}
-                href="/seller/register"
+                href="/demo"
                 size="large"
-                variant="outlined"
                 sx={{
                   px: 5,
                   py: 1.8,
-                  borderRadius: "18px",
+                  borderRadius: "16px",
                   textTransform: "none",
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "#fff",
-                  borderColor: "rgba(255,255,255,0.15)",
-                  background: "rgba(255,255,255,0.04)",
-                  backdropFilter: "blur(12px)",
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  color: DARK_BLUE_COLORS.text.primary,
+                  background: "rgba(255, 255, 255, 0.03)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  backdropFilter: "blur(8px)",
+                  transition: "all 0.2s ease",
                   "&:hover": {
-                    background: "rgba(255,255,255,0.08)",
-                    borderColor: "#60a5fa",
+                    background: "rgba(255, 255, 255, 0.08)",
+                    borderColor: "rgba(255, 255, 255, 0.2)",
                   },
                 }}
               >
-                Become a Seller
+                Request a Demo
               </Button>
-            </Box>
-
-            {/* STATS */}
-            <Box
-              sx={{
-                mt: 7,
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                  sm: "repeat(3,1fr)",
-                },
-                gap: 2,
-                maxWidth: 760,
-              }}
-            >
-              <StatCard value="30K+" label="Active Customers" />
-              <StatCard value="850+" label="Trusted Vendors" />
-              <StatCard value="99.9%" label="Fast Service" />
             </Box>
           </Box>
 
-          {/* RIGHT CONTENT */}
-          <Box sx={{ position: "relative", zIndex: 2 }}>
+          {/* RIGHT CONTENT - Multi-layered Dark Cards */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(12, 1fr)",
+              gridTemplateRows: "repeat(12, 1fr)",
+              width: "100%",
+              height: { xs: "auto", md: 550 },
+              minHeight: { xs: 400, md: "none" },
+              position: "relative",
+            }}
+          >
+            {/* Ambient backdrop glow behind dashboard blocks */}
+            <Box
+              sx={{
+                position: "absolute",
+                width: 350,
+                height: 350,
+                borderRadius: "50%",
+                background: "radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(0,0,0,0) 70%)",
+                filter: "blur(50px)",
+                top: "10%",
+                left: "15%",
+                zIndex: 0,
+              }}
+            />
+
+            {/* Top Right Card */}
+            <ModuleCard
+              sx={{ gridColumn: "7 / -1", gridRow: "1 / 7", background: DARK_BLUE_COLORS.accentMint }}
+              icon={<ShoppingBagRoundedIcon />}
+              iconColor={DARK_BLUE_COLORS.mintText}
+              title="Realtime Activity"
+              value="৳42,880"
+              subtitle="Processing now"
+              pulsing
+            />
+
+            {/* Main Interactive Center Slab */}
             <Paper
               elevation={0}
               sx={{
+                gridColumn: "1 / 9",
+                gridRow: "4 / 11",
                 p: 3,
-                borderRadius: "34px",
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                backdropFilter: "blur(18px)",
-                boxShadow: "0 25px 70px rgba(0,0,0,0.4)",
+                borderRadius: "24px",
+                background: DARK_BLUE_COLORS.cardBg,
+                border: "1px solid rgba(255, 255, 255, 0.07)",
+                backdropFilter: "blur(20px)",
+                boxShadow: "0 30px 60px rgba(0, 0, 0, 0.4)",
+                zIndex: 2,
               }}
             >
-              {/* HEADER */}
-              <Box
-                sx={{
-                  mb: 4,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <Box>
-                  <Typography
-                    sx={{
-                      color: "rgba(255,255,255,0.55)",
-                      fontSize: 14,
-                    }}
-                  >
-                    Dashboard Overview
-                  </Typography>
+              <Typography sx={{ color: DARK_BLUE_COLORS.text.secondary, fontSize: "0.85rem", fontWeight: 600, mb: 1.5 }}>
+                Platform Hub
+              </Typography>
+              <Typography variant="h5" sx={{ color: DARK_BLUE_COLORS.text.primary, fontWeight: 800, mb: 3 }}>
+                Friendly Mart Central
+              </Typography>
 
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      color: "#fff",
-                      fontWeight: 900,
-                    }}
-                  >
-                    Friendly Mart
-                  </Typography>
-                </Box>
-
-                <Chip
-                  icon={<TrendingUpRoundedIcon />}
-                  label="Realtime"
-                  sx={{
-                    color: "#4ade80",
-                    fontWeight: 800,
-                    background: "rgba(34,197,94,0.12)",
-                    border: "1px solid rgba(34,197,94,0.25)",
-                  }}
-                />
-              </Box>
-
-              {/* CARDS */}
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: {
-                    xs: "1fr",
-                    sm: "1fr 1fr",
-                  },
-                  gap: 2,
-                }}
-              >
-                <DashboardCard
-                  title="Orders"
-                  value="18,240"
-                  subtitle="+24% this month"
-                  icon={<ShoppingBagRoundedIcon />}
-                  gradient="linear-gradient(135deg,#2563eb,#4f46e5)"
-                />
-
-                <DashboardCard
-                  title="Vendors"
-                  value="540"
-                  subtitle="Verified Stores"
-                  icon={<StorefrontRoundedIcon />}
-                  gradient="linear-gradient(135deg,#9333ea,#c026d3)"
-                />
-
-                <DashboardCard
-                  title="Deliveries"
-                  value="4,120"
-                  subtitle="Delivered Today"
-                  icon={<LocalShippingRoundedIcon />}
-                  gradient="linear-gradient(135deg,#059669,#22c55e)"
-                />
-
-                <DashboardCard
-                  title="Revenue"
-                  value="৳5.6M"
-                  subtitle="Monthly Growth"
-                  icon={<TrendingUpRoundedIcon />}
-                  gradient="linear-gradient(135deg,#f59e0b,#ea580c)"
-                />
-              </Box>
-
-              {/* ROLE SECTION */}
-              <Box
-                sx={{
-                  mt: 4,
-                  p: 3,
-                  borderRadius: "24px",
-                  background:
-                    "linear-gradient(135deg,rgba(37,99,235,0.18),rgba(147,51,234,0.18))",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    fontWeight: 800,
-                    fontSize: 18,
-                  }}
-                >
-                  User Access Roles
-                </Typography>
-
-                <Box
-                  sx={{
-                    mt: 2.5,
-                    display: "grid",
-                    gridTemplateColumns: {
-                      xs: "1fr 1fr",
-                      sm: "repeat(4,1fr)",
-                    },
-                    gap: 2,
-                  }}
-                >
-                  <RoleCard
-                    icon={<AdminPanelSettingsRoundedIcon />}
-                    label="Admin"
-                  />
-
-                  <RoleCard
-                    icon={<StorefrontRoundedIcon />}
-                    label="Seller"
-                  />
-
-                  <RoleCard
-                    icon={<ManageAccountsRoundedIcon />}
-                    label="Manager"
-                  />
-
-                  <RoleCard
-                    icon={<PersonRoundedIcon />}
-                    label="Customer"
-                  />
-                </Box>
+              <Box sx={{ display: "flex", gap: 1.5 }}>
+                <HubLinkItem icon={<AssessmentRoundedIcon />} label="Analytics" />
+                <HubLinkItem icon={<Inventory2RoundedIcon />} label="Inventory" />
+                <HubLinkItem icon={<StorefrontRoundedIcon />} label="Vendors" />
               </Box>
             </Paper>
+
+            {/* Bottom Right Card */}
+            <ModuleCard
+              sx={{ gridColumn: "8 / -1", gridRow: "9 / -1", background: DARK_BLUE_COLORS.accentAmber }}
+              icon={<GroupAddRoundedIcon />}
+              iconColor={DARK_BLUE_COLORS.amberText}
+              title="New Vendors"
+              value="+14"
+              subtitle="Pending review"
+            />
           </Box>
         </Box>
       </Container>
@@ -368,153 +282,143 @@ export default function Hero() {
   );
 }
 
-function DashboardCard({
+/* ==========================================================================
+   SUPPORTING ATOMS
+   ========================================================================== */
+
+function ModuleCard({
+  icon,
+  iconColor,
   title,
   value,
   subtitle,
-  gradient,
-  icon,
+  background,
+  pulsing,
+  sx,
 }: {
+  icon: ReactNode;
+  iconColor: string;
   title: string;
   value: string;
   subtitle: string;
-  gradient: string;
-  icon: ReactNode;
+  background: string;
+  pulsing?: boolean;
+  sx?: object;
 }) {
   return (
     <Box
       sx={{
-        p: 3,
-        borderRadius: "24px",
-        background: gradient,
-        position: "relative",
-        overflow: "hidden",
-        minHeight: 175,
-        boxShadow: "0 18px 40px rgba(0,0,0,0.28)",
+        p: 2.5,
+        borderRadius: "20px",
+        background: background,
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(12px)",
+        boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+        zIndex: 1,
+        display: "flex",
+        flexDirection: "column",
+        ...sx,
       }}
     >
       <Box
         sx={{
-          position: "absolute",
-          width: 120,
-          height: 120,
-          borderRadius: "50%",
-          background: "rgba(255,255,255,0.12)",
-          top: -35,
-          right: -35,
-        }}
-      />
-
-      <Box sx={{ color: "#fff", opacity: 0.95 }}>
-        {icon}
-      </Box>
-
-      <Typography
-        sx={{
-          mt: 2,
-          color: "rgba(255,255,255,0.8)",
-          fontSize: 14,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 1.5,
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            p: 1.25,
+            borderRadius: "12px",
+            background: "rgba(3, 7, 18, 0.4)",
+            color: iconColor,
+            border: "1px solid rgba(255, 255, 255, 0.05)",
+          }}
+        >
+          {icon}
+        </Box>
+
+        {pulsing && <PulseDot />}
+      </Box>
+
+      <Typography sx={{ color: DARK_BLUE_COLORS.text.secondary, fontSize: "0.8rem", fontWeight: 600 }}>
         {title}
       </Typography>
 
-      <Typography
-        variant="h3"
-        sx={{
-          mt: 1,
-          color: "#fff",
-          fontWeight: 900,
-        }}
-      >
+      <Typography sx={{ mt: 0.5, color: DARK_BLUE_COLORS.text.primary, fontWeight: 800, fontSize: "1.75rem", letterSpacing: "-0.03em" }}>
         {value}
       </Typography>
 
-      <Typography
-        sx={{
-          mt: 1,
-          color: "rgba(255,255,255,0.75)",
-          fontSize: 14,
-        }}
-      >
+      <Typography sx={{ mt: "auto", color: DARK_BLUE_COLORS.text.secondary, fontSize: "0.75rem", opacity: 0.7 }}>
         {subtitle}
       </Typography>
     </Box>
   );
 }
 
-function StatCard({
-  value,
-  label,
-}: {
-  value: string;
-  label: string;
-}) {
+function HubLinkItem({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <Box
       sx={{
-        p: 3,
-        borderRadius: "22px",
-        background: "rgba(255,255,255,0.05)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        backdropFilter: "blur(12px)",
-      }}
-    >
-      <Typography
-        sx={{
-          color: "#fff",
-          fontWeight: 900,
-          fontSize: "2rem",
-        }}
-      >
-        {value}
-      </Typography>
-
-      <Typography
-        sx={{
-          mt: 0.5,
-          color: "rgba(255,255,255,0.62)",
-          fontSize: 14,
-        }}
-      >
-        {label}
-      </Typography>
-    </Box>
-  );
-}
-
-function RoleCard({
-  icon,
-  label,
-}: {
-  icon: ReactNode;
-  label: string;
-}) {
-  return (
-    <Box
-      sx={{
-        py: 2.5,
-        px: 2,
-        borderRadius: "20px",
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        backdropFilter: "blur(10px)",
+        flex: 1,
+        py: 2,
+        px: 1,
+        borderRadius: "14px",
+        background: "rgba(255, 255, 255, 0.03)",
+        border: "1px solid rgba(255, 255, 255, 0.06)",
+        color: DARK_BLUE_COLORS.text.primary,
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        flexDirection: "column",
-        gap: 1,
-        color: "#fff",
-        fontWeight: 700,
-        transition: "0.3s ease",
+        gap: 0.75,
+        textAlign: "center",
+        fontSize: "0.8rem",
+        fontWeight: 600,
+        cursor: "pointer",
+        transition: "all 0.2s ease",
+        "& .MuiSvgIcon-root": { color: DARK_BLUE_COLORS.accentCyan, fontSize: "1.25rem" },
         "&:hover": {
-          transform: "translateY(-6px)",
-          background: "rgba(255,255,255,0.12)",
+          transform: "translateY(-3px)",
+          background: "rgba(255, 255, 255, 0.08)",
+          borderColor: DARK_BLUE_COLORS.accentCyan,
         },
       }}
     >
       {icon}
       {label}
     </Box>
+  );
+}
+
+function PulseDot() {
+  return (
+    <Box
+      sx={{
+        width: 8,
+        height: 8,
+        borderRadius: "50%",
+        background: DARK_BLUE_COLORS.mintText,
+        position: "relative",
+        "::after": {
+          content: '""',
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+          borderRadius: "50%",
+          background: DARK_BLUE_COLORS.mintText,
+          animation: "pulse 2s infinite",
+        },
+        "@keyframes pulse": {
+          "0%": { transform: "scale(1)", opacity: 0.8 },
+          "100%": { transform: "scale(3.5)", opacity: 0 },
+        },
+      }}
+    />
   );
 }

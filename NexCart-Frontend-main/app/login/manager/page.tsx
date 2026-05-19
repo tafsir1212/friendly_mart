@@ -46,7 +46,7 @@ const ManagerLoginPage = () => {
               </svg>
             </div>
             <h1 className="text-3xl font-black text-white">Manager Portal</h1>
-            <p className="text-slate-400 mt-2">NexCart Operations Dashboard</p>
+            <p className="text-slate-400 mt-2">Freindly Mart Operations Dashboard</p>
           </div>
 
           {/* Form */}

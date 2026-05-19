@@ -1,3 +1,5 @@
+
+
 import Link from "next/link";
 
 import Box from "@mui/material/Box";
@@ -9,9 +11,7 @@ import Typography from "@mui/material/Typography";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 import ProductFilterBar from "./ProductFilterBar";
 import AddToCartButton from "./AddToCartButton";
@@ -38,26 +38,15 @@ export type PriceFilter = "default" | "lowToHigh" | "highToLow";
 
 const API_BASE_URL = "http://localhost:3000";
 
-const PRODUCT_CATEGORIES = [
-  "Electronics",
-  "Fashion",
-  "Home & Living",
-  "Beauty",
-  "Sports",
-];
-
 async function getProducts(): Promise<Product[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/seller/products`, {
+    const res = await fetch(`${API_BASE_URL}/seller/products`, {
       cache: "no-store",
     });
 
-    if (!response.ok) {
-      return [];
-    }
+    if (!res.ok) return [];
 
-    const data = await response.json();
-
+    const data = await res.json();
     return Array.isArray(data) ? data : data?.data || [];
   } catch {
     return [];
@@ -75,177 +64,78 @@ export default async function ProductGrid({
 }: ProductGridProps) {
   const products = await getProducts();
 
-  let filteredProducts = [...products];
+  let filtered = [...products];
 
   if (selectedCategory !== "all") {
-    filteredProducts = filteredProducts.filter(
-      (product) => product.category === selectedCategory
-    );
+    filtered = filtered.filter((p) => p.category === selectedCategory);
   }
 
   if (priceFilter === "highToLow") {
-    filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
+    filtered.sort((a, b) => b.price - a.price);
   }
 
   return (
     <Box
-      component="section"
       sx={{
+        minHeight: "100vh",
+        py: 8,
         background:
-      "linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%)",
-        py: {
-          xs: 7,
-          md: 10,
-        },
+          "radial-gradient(circle at top, #0b1220 0%, #020617 100%)",
       }}
     >
       <Container maxWidth="xl">
-        <Box
-          sx={{
-            mb: 5,
-            display: "flex",
-            flexDirection: {
-              xs: "column",
-              md: "row",
-            },
-            alignItems: {
-              xs: "flex-start",
-              md: "flex-end",
-            },
-            justifyContent: "space-between",
-            gap: 2,
-          }}
-        >
-          <Box>
-            <Chip
-              label="Latest Products"
-              sx={{
-                mb: 2,
-                bgcolor: "#dcfce7",
-                color: "primary.dark",
-                fontWeight: 800,
-              }}
-            />
+        {/* HEADER */}
+        <Box sx={{ mb: 4 }}>
+          <Chip
+            label="Premium Products"
+            sx={{
+              mb: 2,
+              fontWeight: 800,
+              background: "rgba(56,189,248,0.1)",
+              color: "#38bdf8",
+            }}
+          />
 
-            <Typography
-              component="h2"
-              variant="h3"
-              sx={{
-                fontWeight: 900,
-                letterSpacing: "-1px",
-                color: "#ffffff",
-                fontSize: {
-                  xs: "2rem",
-                  md: "3rem",
-                },
-              }}
-            >
-              Discover Premium Products
-            </Typography>
+          <Typography sx={{ fontSize: 34, fontWeight: 900, color: "#fff" }}>
+            Explore Products
+          </Typography>
 
-            <Typography
-              sx={{
-                mt: 1.5,
-                color: "text.secondary",
-                maxWidth: 620,
-                lineHeight: 1.7,
-              }}
-            >
-              Explore products uploaded by NexCart sellers with real-time
-              availability, shop information, category filter, and price
-              sorting.
-            </Typography>
-          </Box>
-
-          <Link href="/products" style={{ textDecoration: "none" }}>
-            <Button
-              variant="outlined"
-              sx={{
-                color: "text.primary",
-                borderColor: "#d1d5db",
-                bgcolor: "white",
-                "&:hover": {
-                  borderColor: "primary.main",
-                  color: "primary.main",
-                  bgcolor: "white",
-                },
-              }}
-            >
-              View All Products
-            </Button>
-          </Link>
+          <Typography sx={{ color: "rgba(255,255,255,0.6)" }}>
+            Discover best deals from sellers
+          </Typography>
         </Box>
 
+        {/* FILTER */}
         <ProductFilterBar
-          categories={PRODUCT_CATEGORIES}
+          categories={["Electronics", "Fashion", "Home & Living", "Beauty"]}
           selectedCategory={selectedCategory}
           priceFilter={priceFilter}
         />
 
-        {products.length > 0 && (
-          <Typography
-            sx={{
-              mb: 2,
-              color: "text.secondary",
-              fontSize: 14,
-              fontWeight: 600,
-            }}
-          >
-            Showing {filteredProducts.length} of {products.length} products
-          </Typography>
-        )}
-
-        {filteredProducts.length === 0 && (
-          <Paper
-            elevation={0}
-            sx={{
-              p: 5,
-              borderRadius: 2,
-              textAlign: "center",
-              bgcolor: "#f9fafb",
-              border: "1px dashed #d1d5db",
-            }}
-          >
-            <Inventory2OutlinedIcon
-              sx={{
-                fontSize: 58,
-                color: "text.secondary",
-                mb: 2,
-              }}
-            />
-
-            <Typography component="h3" variant="h5" sx={{ fontWeight: 900 }}>
-              No products found
-            </Typography>
-
-            <Typography sx={{ mt: 1, color: "text.secondary" }}>
-              Try changing the category or price filter.
-            </Typography>
-          </Paper>
-        )}
-
-        {filteredProducts.length > 0 && (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "repeat(2, 1fr)",
-                md: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-              },
-              gap: 3,
-            }}
-          >
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </Box>
-        )}
+        {/* GRID */}
+        <Box
+          sx={{
+            mt: 5,
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+              md: "1fr 1fr 1fr",
+              lg: "1fr 1fr 1fr 1fr",
+            },
+            gap: 3,
+          }}
+        >
+          {filtered.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Box>
       </Container>
     </Box>
   );
 }
+
+/* ================= NEW CARD DESIGN ================= */
 
 function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = Number(product.quantity) <= 0;
@@ -256,176 +146,92 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <Paper
-      component="article"
       elevation={0}
       sx={{
+        borderRadius: "22px",
         overflow: "hidden",
-        borderRadius: 2,
-        bgcolor: "white",
-        border: "1px solid #e5e7eb",
-        transition: "0.25s ease",
-        position: "relative",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background:
+          "linear-gradient(145deg, rgba(15,23,42,0.9), rgba(2,6,23,0.95))",
+        color: "white",
+        transition: "0.35s ease",
         "&:hover": {
-          transform: "translateY(-6px)",
-          boxShadow: "0 24px 60px rgba(15, 23, 42, 0.12)",
-          borderColor: "#86efac",
-        },
-        "&:hover .cart-overlay": {
-          opacity: 1,
-          transform: "translateY(0)",
-        },
-        "&:hover .product-image": {
-          transform: "scale(1.06)",
+          transform: "translateY(-8px)",
+          borderColor: "rgba(56,189,248,0.4)",
+          boxShadow: "0 25px 60px rgba(0,0,0,0.45)",
         },
       }}
     >
-      <Box
-        sx={{
-          height: 220,
-          position: "relative",
-          overflow: "hidden",
-          bgcolor: "#f9fafb",
-        }}
-      >
+      {/* IMAGE SECTION */}
+      <Box sx={{ position: "relative", height: 220, overflow: "hidden" }}>
         {imageUrl ? (
           <Box
             component="img"
             src={imageUrl}
-            alt={`${product.productName} product image`}
-            className="product-image"
+            alt={product.productName}
             sx={{
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              transition: "0.35s ease",
+              transition: "0.4s ease",
+              "&:hover": { transform: "scale(1.08)" },
             }}
           />
         ) : (
           <Box
-            className="product-image"
             sx={{
               width: "100%",
               height: "100%",
-              background:
-                "linear-gradient(135deg, #dcfce7 0%, #f0fdf4 55%, #ffffff 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "0.35s ease",
+              background:
+                "linear-gradient(135deg, rgba(56,189,248,0.15), rgba(99,102,241,0.15))",
             }}
           >
-            <ShoppingCartIcon sx={{ fontSize: 58, color: "primary.main" }} />
+            <ShoppingCartIcon sx={{ fontSize: 60, color: "#38bdf8" }} />
           </Box>
         )}
 
+        {/* STOCK BADGE */}
         <Chip
           label={isOutOfStock ? "Out of Stock" : "In Stock"}
           size="small"
           sx={{
             position: "absolute",
-            top: 14,
-            left: 14,
-            bgcolor: isOutOfStock ? "#fee2e2" : "#dcfce7",
-            color: isOutOfStock ? "#b91c1c" : "#15803d",
-            fontWeight: 900,
+            top: 12,
+            left: 12,
+            fontWeight: 800,
+            bgcolor: isOutOfStock
+              ? "rgba(239,68,68,0.2)"
+              : "rgba(34,197,94,0.2)",
+            color: isOutOfStock ? "#f87171" : "#4ade80",
+            border: "1px solid rgba(255,255,255,0.1)",
           }}
         />
-
-        <Box
-          className="cart-overlay"
-          sx={{
-            position: "absolute",
-            left: 14,
-            right: 14,
-            bottom: 14,
-            opacity: 0,
-            transform: "translateY(10px)",
-            transition: "0.25s ease",
-          }}
-        >
-          <AddToCartButton
-            productName={product.productName}
-            quantity={Number(product.quantity)}
-             productId={product.id}     />
-        </Box>
       </Box>
 
+      {/* CONTENT */}
       <Box sx={{ p: 2.5 }}>
         <Typography
           sx={{
-            color: "primary.main",
-            fontSize: 13,
-            fontWeight: 900,
+            fontSize: 12,
+            fontWeight: 800,
+            color: "#38bdf8",
             textTransform: "uppercase",
-            letterSpacing: "0.5px",
+            letterSpacing: 1,
           }}
         >
           {product.category}
         </Typography>
 
-        <Box
-          sx={{
-            mt: 0.8,
-            display: "flex",
-            alignItems: "center",
-            gap: 0.7,
-            color: "text.secondary",
-          }}
-        >
-          <StorefrontIcon sx={{ fontSize: 17, color: "primary.main" }} />
-
-          <Typography
-            sx={{
-              fontSize: 13,
-              fontWeight: 700,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {product.sellerShop?.shopName || "No shop assigned"}
-          </Typography>
-        </Box>
-
-        {product.sellerShop?.shopAddress && (
-          <Box
-            sx={{
-              mt: 0.5,
-              display: "flex",
-              alignItems: "center",
-              gap: 0.7,
-              color: "text.secondary",
-            }}
-          >
-            <LocationOnIcon sx={{ fontSize: 16, color: "text.secondary" }} />
-
-            <Typography
-              sx={{
-                fontSize: 12.5,
-                fontWeight: 500,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {product.sellerShop.shopAddress}
-            </Typography>
-          </Box>
-        )}
-
         <Typography
-          component="h3"
-          variant="h6"
           sx={{
             mt: 1,
+            fontSize: 18,
             fontWeight: 900,
-            lineHeight: 1.35,
-            color: "text.primary",
-            minHeight: 52,
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
+            color: "white",
+            minHeight: 50,
           }}
         >
           {product.productName}
@@ -434,69 +240,68 @@ function ProductCard({ product }: { product: Product }) {
         <Typography
           sx={{
             mt: 1,
-            color: "text.secondary",
-            fontSize: 14,
-            lineHeight: 1.6,
-            minHeight: 44,
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
+            fontSize: 13,
+            color: "rgba(255,255,255,0.6)",
+            minHeight: 40,
           }}
         >
-          {product.description || "No description available."}
+          {product.description || "No description available"}
         </Typography>
 
+        {/* SHOP INFO */}
+        <Box sx={{ mt: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
+          <StorefrontIcon sx={{ fontSize: 18, color: "#38bdf8" }} />
+          <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>
+            {product.sellerShop?.shopName || "Unknown Shop"}
+          </Typography>
+        </Box>
+
+        {/* PRICE */}
         <Box
           sx={{
-            mt: 2.5,
+            mt: 2,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            gap: 2,
           }}
         >
-          <Box>
-            <Typography
-              sx={{
-                color: "text.secondary",
-                fontSize: 13,
-                fontWeight: 700,
-              }}
-            >
-              Price
-            </Typography>
+          <Typography sx={{ fontSize: 20, fontWeight: 900, color: "white" }}>
+            ৳{Number(product.price).toLocaleString()}
+          </Typography>
 
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 900,
-                color: "text.primary",
-              }}
-            >
-              ৳{Number(product.price).toLocaleString()}
-            </Typography>
-          </Box>
+          <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
+            Stock: {product.quantity}
+          </Typography>
+        </Box>
 
-          <Link
-            href={`/products/${product.id}`}
-            style={{ textDecoration: "none" }}
-          >
+        {/* ADD TO CART (ALWAYS VISIBLE NOW) */}
+        <Box sx={{ mt: 2 }}>
+          <AddToCartButton
+            productName={product.productName}
+            quantity={Number(product.quantity)}
+            productId={product.id}
+          />
+        </Box>
+
+        {/* VIEW BUTTON */}
+        <Box sx={{ mt: 1.5 }}>
+          <Link href={`/products/${product.id}`}>
             <Button
+              fullWidth
               variant="outlined"
-              size="small"
               startIcon={<VisibilityIcon />}
               sx={{
-                borderColor: "#d1d5db",
-                color: "text.primary",
+                borderColor: "rgba(255,255,255,0.2)",
+                color: "white",
+                borderRadius: "12px",
+                fontWeight: 700,
                 "&:hover": {
-                  borderColor: "primary.main",
-                  color: "primary.main",
-                  bgcolor: "white",
+                  borderColor: "#38bdf8",
+                  color: "#38bdf8",
                 },
               }}
             >
-              View
+              View Details
             </Button>
           </Link>
         </Box>

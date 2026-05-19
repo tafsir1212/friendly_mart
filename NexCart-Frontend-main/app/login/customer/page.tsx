@@ -63,153 +63,326 @@ export default function CustomerLoginPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#f4f6fb] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+ return (
+  <div className="relative min-h-screen overflow-hidden bg-[#050816]">
+    {/* BACKGROUND */}
+    <div className="absolute inset-0">
+      <div className="absolute top-[-120px] left-[-120px] h-[320px] w-[320px] rounded-full bg-cyan-500/15 blur-[120px]" />
 
-        {/* ── Left Panel ── */}
-        <div className="relative hidden md:flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 p-12 text-white overflow-hidden">
-          {/* Background blobs */}
-          <div className="absolute top-[-60px] left-[-60px] w-64 h-64 bg-white/10 rounded-full blur-2xl" />
-          <div className="absolute bottom-[-40px] right-[-40px] w-48 h-48 bg-purple-400/20 rounded-full blur-2xl" />
+      <div className="absolute bottom-[-120px] right-[-120px] h-[320px] w-[320px] rounded-full bg-indigo-500/15 blur-[120px]" />
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center text-center gap-6">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center ring-1 ring-white/30">
-              <ShoppingBag size={30} className="text-white" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:80px_80px]" />
+    </div>
+
+    <div className="relative z-10 flex min-h-screen items-center justify-center px-5 py-10">
+      <div
+        className="
+          grid w-full max-w-6xl overflow-hidden
+          rounded-[40px]
+          border border-white/10
+          bg-white/[0.04]
+          backdrop-blur-2xl
+          lg:grid-cols-2
+        "
+      >
+        {/* LEFT SIDE */}
+        <div className="relative hidden overflow-hidden p-12 lg:flex lg:flex-col lg:justify-between">
+          {/* gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-sky-500/10 to-indigo-500/20" />
+
+          {/* glow */}
+          <div className="absolute top-[-100px] right-[-100px] h-[280px] w-[280px] rounded-full bg-cyan-400/20 blur-[120px]" />
+
+          <div className="relative z-10">
+            {/* LOGO */}
+            <div className="flex items-center gap-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl">
+                <ShoppingBag
+                  size={30}
+                  className="text-cyan-300"
+                />
+              </div>
+
+              <div>
+                <h1 className="text-3xl font-black tracking-tight text-white">
+                  Friendly Mart
+                </h1>
+
+                <p className="mt-1 text-sm text-cyan-100/70">
+                  Smart shopping platform
+                </p>
+              </div>
             </div>
 
-            <div>
-              <h1 className="text-3xl font-extrabold tracking-tight">NexCart</h1>
-              <p className="text-indigo-200 mt-2 text-sm leading-relaxed max-w-xs">
-                Your one-stop shop for everything. Fast delivery, easy returns, and great deals.
+            {/* HERO */}
+            <div className="mt-20">
+              <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-2 text-xs font-black uppercase tracking-[0.25em] text-cyan-300">
+                Customer Portal
+              </span>
+
+              <h2 className="mt-8 text-6xl font-black leading-[1] tracking-tight text-white">
+                Welcome
+                <br />
+                Back.
+              </h2>
+
+              <p className="mt-8 max-w-lg text-lg leading-relaxed text-slate-300">
+                Access your orders, track shipments,
+                manage your cart and enjoy a seamless
+                premium shopping experience.
               </p>
             </div>
+          </div>
 
-            {/* Feature pills */}
-            <div className="flex flex-col gap-2 w-full mt-2">
-              {["🚚 Free delivery on orders over $50", "🔒 Secure & encrypted checkout", "⭐ 10,000+ happy customers"].map((f) => (
-                <div key={f} className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2.5 text-sm font-medium backdrop-blur-sm">
-                  {f}
-                </div>
-              ))}
-            </div>
+          {/* FEATURES */}
+          <div className="relative z-10 mt-10 space-y-4">
+            {[
+              "Fast worldwide delivery",
+              "Secure encrypted payments",
+              "24/7 premium customer support",
+            ].map((item) => (
+              <div
+                key={item}
+                className="
+                  flex items-center gap-4
+                  rounded-2xl
+                  border border-white/10
+                  bg-white/[0.06]
+                  px-5 py-4
+                  backdrop-blur-xl
+                "
+              >
+                <div className="h-3 w-3 rounded-full bg-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.8)]" />
+
+                <span className="font-medium text-white">
+                  {item}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* ── Right Panel ── */}
-        <div className="flex flex-col justify-center px-8 py-12 sm:px-12">
-
-          {/* Logo (mobile only) */}
-          <div className="flex md:hidden items-center gap-2 mb-8">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
-              <ShoppingBag size={18} className="text-white" />
-            </div>
-            <span className="text-xl font-extrabold text-slate-800">NexCart</span>
-          </div>
-
-          {/* Heading */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-extrabold text-slate-800">Welcome back</h2>
-            <p className="text-slate-400 text-sm mt-1.5">Sign in to your customer account</p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-
-            {/* Email */}
-            <div>
-              <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">
-                <Mail size={12} /> Email
-              </label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className={`w-full bg-slate-50 border rounded-xl px-4 py-3.5 text-sm text-slate-800 font-medium outline-none transition-all placeholder:text-slate-300
-                  focus:bg-white focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400
-                  ${errors?.email ? "border-red-300 bg-red-50" : "border-slate-200"}`}
+        {/* RIGHT SIDE */}
+        <div className="relative flex flex-col justify-center p-8 sm:p-12 lg:p-16">
+          {/* MOBILE LOGO */}
+          <div className="mb-10 flex items-center gap-4 lg:hidden">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10">
+              <ShoppingBag
+                size={24}
+                className="text-cyan-400"
               />
+            </div>
+
+            <div>
+              <h1 className="text-2xl font-black text-white">
+                NexCart
+              </h1>
+
+              <p className="text-sm text-slate-400">
+                Shopping Platform
+              </p>
+            </div>
+          </div>
+
+          {/* FORM HEADER */}
+          <div>
+            <span className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-400">
+              Login
+            </span>
+
+            <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+              Sign In
+            </h2>
+
+            <p className="mt-4 max-w-md text-base leading-relaxed text-slate-400">
+              Continue your shopping journey with
+              secure access to your customer account.
+            </p>
+          </div>
+
+          {/* FORM */}
+          <form
+            onSubmit={handleSubmit}
+            className="mt-12 space-y-6"
+          >
+            {/* EMAIL */}
+            <div>
+              <label className="mb-3 block text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+                Email Address
+              </label>
+
+              <div className="relative">
+                <Mail
+                  size={18}
+                  className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"
+                />
+
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      email: e.target.value,
+                    })
+                  }
+                  className={`
+                    h-16 w-full rounded-2xl
+                    border bg-white/[0.03]
+                    pl-14 pr-5
+                    text-white
+                    outline-none
+                    transition-all duration-300
+                    placeholder:text-slate-500
+                    focus:border-cyan-400/40
+                    focus:bg-cyan-500/[0.03]
+                    ${
+                      errors?.email
+                        ? "border-red-500/30"
+                        : "border-white/10"
+                    }
+                  `}
+                />
+              </div>
+
               {errors?.email && (
-                <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.email[0]}</p>
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.email[0]}
+                </p>
               )}
             </div>
 
-            {/* Password */}
+            {/* PASSWORD */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-widest">
-                  <Lock size={12} /> Password
+              <div className="mb-3 flex items-center justify-between">
+                <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+                  Password
                 </label>
-                <a href="#" className="text-xs text-indigo-500 hover:text-indigo-700 font-semibold transition">
-                  Forgot password?
+
+                <a
+                  href="#"
+                  className="text-sm font-semibold text-cyan-400 hover:text-cyan-300"
+                >
+                  Forgot Password?
                 </a>
               </div>
+
               <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Min. 6 characters"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className={`w-full bg-slate-50 border rounded-xl px-4 py-3.5 pr-11 text-sm text-slate-800 font-medium outline-none transition-all placeholder:text-slate-300
-                    focus:bg-white focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400
-                    ${errors?.password ? "border-red-300 bg-red-50" : "border-slate-200"}`}
+                <Lock
+                  size={18}
+                  className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"
                 />
+
+                <input
+                  type={
+                    showPassword ? "text" : "password"
+                  }
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      password: e.target.value,
+                    })
+                  }
+                  className={`
+                    h-16 w-full rounded-2xl
+                    border bg-white/[0.03]
+                    pl-14 pr-14
+                    text-white
+                    outline-none
+                    transition-all duration-300
+                    placeholder:text-slate-500
+                    focus:border-cyan-400/40
+                    focus:bg-cyan-500/[0.03]
+                    ${
+                      errors?.password
+                        ? "border-red-500/30"
+                        : "border-white/10"
+                    }
+                  `}
+                />
+
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-500 transition"
+                  onClick={() =>
+                    setShowPassword(!showPassword)
+                  }
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-cyan-400"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
+
               {errors?.password && (
-                <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.password[0]}</p>
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.password[0]}
+                </p>
               )}
             </div>
 
-            {/* Submit */}
+            {/* BUTTON */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-200 mt-2"
+              className="
+                group flex h-16 w-full items-center
+                justify-center gap-3 rounded-2xl
+                bg-cyan-400
+                text-base font-black text-black
+                transition-all duration-300
+                hover:scale-[1.02]
+                hover:bg-cyan-300
+                disabled:cursor-not-allowed
+                disabled:opacity-60
+              "
             >
               {loading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Signing in…
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
+                  Signing In...
                 </>
               ) : (
                 <>
-                  Sign In <ArrowRight size={16} />
+                  Access Dashboard
+
+                  <ArrowRight
+                    size={18}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </>
               )}
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-slate-100" />
-            <span className="text-xs text-slate-300 font-medium">OR</span>
-            <div className="flex-1 h-px bg-slate-100" />
+          {/* FOOTER */}
+          <div className="mt-10 flex items-center gap-3">
+            <div className="h-px flex-1 bg-white/10" />
+
+            <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+              New Customer
+            </span>
+
+            <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          {/* Register */}
-          <p className="text-center text-sm text-slate-500">
+          <p className="mt-8 text-center text-base text-slate-400">
             Don&apos;t have an account?{" "}
             <Link
               href="/register/customer"
-              className="text-indigo-600 font-bold hover:text-indigo-800 transition"
+              className="font-bold text-cyan-400 transition hover:text-cyan-300"
             >
-              Create one →
+              Create Account →
             </Link>
           </p>
-
-
         </div>
-
       </div>
     </div>
-  );
+  </div>
+);
 }

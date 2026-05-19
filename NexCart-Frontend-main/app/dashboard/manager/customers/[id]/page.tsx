@@ -93,7 +93,11 @@ export default function ManagerCustomerDetailPage() {
           <div className="flex items-start gap-6">
             <div>
               {customer.profilePic ? (
-                <img src={customer.profilePic} alt="pic" className="border border-white/10 rounded-full w-20 h-20 object-cover" />
+                <img
+                  src={`http://localhost:3000/uploads/profile/${customer.profilePic}`}
+                  alt="pic"
+                  className="border border-white/10 rounded-full w-20 h-20 object-cover"
+                />
               ) : (
                 <div className="flex justify-center items-center bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full w-20 h-20 font-bold text-white text-xl">
                   {(customer.name || "?")[0].toUpperCase()}

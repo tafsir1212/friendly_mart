@@ -56,6 +56,60 @@ useEffect(() => {
     };
   }, []);
 
+
+  useEffect(() => {
+ 
+  const pusher = new Pusher(
+ 
+    "f6b99afdc4a898a8e030",
+ 
+    {
+
+      cluster: "ap2",
+
+    }
+
+  );
+ 
+  const channel =
+
+    pusher.subscribe(
+
+      "manager-channel"
+
+    );
+ 
+  channel.bind(
+ 
+    "manager-new-order",
+ 
+    (data: any) => {
+ 
+      console.log(data);
+ 
+      toast.success(
+ 
+        `🛒 ${data.message}`
+
+      );
+
+    }
+
+  );
+ 
+  return () => {
+ 
+    channel.unbind_all();
+ 
+    channel.unsubscribe();
+ 
+    pusher.disconnect();
+
+  };
+ 
+}, []);
+ 
+
   useEffect(() => {
     const token = Cookies.get("token");
     const role = Cookies.get("role");

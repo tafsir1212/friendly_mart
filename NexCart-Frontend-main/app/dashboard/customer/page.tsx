@@ -8,16 +8,24 @@ import Pusher from "pusher-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+
 import {
   User,
   ShoppingCart,
   Package,
   LogOut,
-  TrendingUp,
   Clock,
   CheckCircle,
   Bell,
   ChevronRight,
+  Zap,
+  Home,
+  MessageSquare,
+  BarChart2,
+  Search,
+  Menu,
+  TrendingUp,
 } from "lucide-react";
 
 export default function CustomerDashboard() {
@@ -27,16 +35,16 @@ export default function CustomerDashboard() {
     "overview" | "cart" | "orders"
   >("overview");
 
+  // const [sidebarOpen, setSidebarOpen] = useState(false);
+
   useEffect(() => {
-    const pusher = new Pusher("8ce8e1219e4b306f5eba", {
+    const pusher = new Pusher("f6b99afdc4a898a8e030", {
       cluster: "ap2",
     });
 
     const channel = pusher.subscribe("order-channel");
 
     channel.bind("order-status-updated", (data: any) => {
-      console.log("Realtime Update:", data);
-
       setOrders((prev) =>
         prev.map((order) =>
           order.id === data.orderId
@@ -45,12 +53,13 @@ export default function CustomerDashboard() {
         )
       );
 
-      toast.success(`Order #${data.orderId} is now ${data.status}`);
+      toast.success(`📦 Order #${data.orderId} is now ${data.status}`);
     });
 
     return () => {
       channel.unbind_all();
       channel.unsubscribe();
+      pusher.disconnect();
     };
   }, []);
 
@@ -67,14 +76,18 @@ export default function CustomerDashboard() {
 
     axios
       .get("http://localhost:3000/customer/profile", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((res) => setUser(res.data))
       .catch(console.log);
 
     axios
       .get(`http://localhost:3000/customer/my-orders/${payload.sub}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((res) => setOrders(res.data))
       .catch(console.log);
@@ -86,370 +99,374 @@ export default function CustomerDashboard() {
     window.location.href = "/login/customer";
   };
 
+  const pendingCount = orders.filter(
+    (o) => o.status === "pending"
+  ).length;
+
+  const deliveredCount = orders.filter(
+    (o) => o.status === "delivered"
+  ).length;
+
   const stats = [
     {
       label: "Total Orders",
       value: orders.length,
-      icon: TrendingUp,
-      color: "text-cyan-400",
-      bg: "bg-cyan-500/10",
-      border: "border-cyan-500/20",
+      icon: BarChart2,
+      color: "from-sky-500 to-cyan-400",
     },
     {
       label: "Pending",
-      value: orders.filter((o) => o.status === "pending").length,
+      value: pendingCount,
       icon: Clock,
-      color: "text-yellow-400",
-      bg: "bg-yellow-500/10",
-      border: "border-yellow-500/20",
+      color: "from-orange-500 to-amber-400",
     },
     {
       label: "Delivered",
-      value: orders.filter((o) => o.status === "delivered").length,
+      value: deliveredCount,
       icon: CheckCircle,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10",
-      border: "border-emerald-500/20",
+      color: "from-emerald-500 to-green-400",
     },
   ];
 
   const navItems = [
-    { key: "overview", label: "Overview", icon: TrendingUp },
-    { key: "cart", label: "My Cart", icon: ShoppingCart },
-    { key: "orders", label: "Orders", icon: Package },
+    {
+      key: "overview",
+      label: "Overview",
+      icon: Home,
+    },
+    {
+      key: "cart",
+      label: "My Cart",
+      icon: ShoppingCart,
+    },
+    {
+      key: "orders",
+      label: "Orders",
+      icon: Package,
+    },
   ] as const;
 
   return (
-    <div className="bg-[#060816] min-h-screen text-white">
+    <div
+      className="min-h-screen text-white overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 25%),
+          radial-gradient(circle at bottom right, rgba(99,102,241,0.15), transparent 30%),
+          linear-gradient(to bottom, #030712, #0b1120)
+        `,
+      }}
+    >
+      {/* BACKGROUND EFFECTS */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[10%] w-[500px] h-[500px] rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[5%] w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[120px]" />
 
-      {/* Sidebar */}
-      <aside className="hidden left-0 z-30 fixed inset-y-0 lg:flex flex-col bg-[#0d1325]/95 backdrop-blur-xl border-white/10 border-r w-72">
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+      </div>
 
-        {/* Logo */}
-        <div className="px-6 py-6 border-white/10 border-b">
-          <div className="flex items-center gap-3">
-            <div className="flex justify-center items-center bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg rounded-2xl w-10 h-10">
-              <ShoppingCart size={18} className="text-white" />
-            </div>
 
-            <div>
-              <h1 className="font-black text-white text-xl tracking-wide">
-                ShopZone
-              </h1>
-              <p className="text-slate-400 text-xs">
-                Customer Dashboard
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* MOBILE OVERLAY */}
+   
 
-        {/* User */}
-        <div className="px-6 py-5 border-white/10 border-b">
-          <div className="flex items-center gap-4 bg-white/5 p-3 rounded-2xl">
-            <img
-              src={
-                user?.profilePic
-                  ? `http://localhost:3000/uploads/profile/${user.profilePic}`
-                  : "/no-image.png"
-              }
-              alt="Profile"
-              className="shadow-lg border-2 border-cyan-500/40 rounded-2xl w-14 h-14 object-cover"
-            />
+      {/* MAIN */}
+      <div className=" relative z-10">
+        {/* HEADER */}
+       
 
-            <div className="min-w-0">
-              <p className="font-bold text-white text-sm truncate">
-                {user?.name ?? "User"}
-              </p>
-
-              <p className="text-slate-400 text-xs truncate">
-                {user?.email}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Nav */}
-        <nav className="flex flex-col flex-1 gap-2 px-4 py-5">
-
-          {navItems.map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              onClick={() => setActiveTab(key)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-300
-              
-              ${
-                activeTab === key
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
-                  : "text-slate-300 hover:bg-white/5 hover:text-white"
-              }`}
-            >
-              <Icon size={18} />
-              {label}
-            </button>
-          ))}
-
-          <Link
-            href="/dashboard/customer/profile"
-            className="flex items-center gap-3 hover:bg-white/5 px-4 py-3 rounded-2xl font-semibold text-slate-300 hover:text-white text-sm transition-all"
-          >
-            <User size={18} />
-            Profile
-          </Link>
-
-          <Link
-            href="/dashboard/customer/myorder"
-            className="flex items-center gap-3 hover:bg-white/5 px-4 py-3 rounded-2xl font-semibold text-slate-300 hover:text-white text-sm transition-all"
-          >
-            <Package size={18} />
-            All Orders
-          </Link>
-        </nav>
-
-        {/* Logout */}
-        <div className="p-4 border-white/10 border-t">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 bg-red-500/10 hover:bg-red-500/20 px-4 py-3 rounded-2xl w-full font-semibold text-red-400 text-sm transition-all"
-          >
-            <LogOut size={18} />
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Main */}
-      <div className="lg:pl-72">
-
-        {/* Header */}
-        <header className="top-0 z-20 sticky flex justify-between items-center bg-[#060816]/80 backdrop-blur-xl px-6 py-5 border-white/10 border-b">
-
-          <div>
-            <h1 className="font-black text-white text-2xl">
-              {navItems.find((n) => n.key === activeTab)?.label ??
-                "Dashboard"}
-            </h1>
-
-            <p className="mt-1 text-slate-400 text-sm">
-              Welcome back,{" "}
-              <span className="font-semibold text-cyan-400">
-                {user?.name?.split(" ")[0] ?? "User"}
-              </span>
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-
-            {/* Mobile Tabs */}
-            <div className="lg:hidden flex items-center gap-2">
-              {navItems.map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key)}
-                  className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all
-
-                  ${
-                    activeTab === key
-                      ? "bg-cyan-500 text-white"
-                      : "bg-white/10 text-slate-300"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            {/* Notification */}
-            <button className="relative bg-white/5 hover:bg-white/10 p-3 rounded-2xl text-slate-300 transition-all">
-              <Bell size={18} />
-
-              {orders.filter((o) => o.status === "pending").length > 0 && (
-                <span className="top-2 right-2 absolute bg-red-500 rounded-full w-2.5 h-2.5" />
-              )}
-            </button>
-
-            {/* Avatar */}
-            <img
-              src={
-                user?.profilePic
-                  ? `http://localhost:3000/uploads/profile/${user.profilePic}`
-                  : "/no-image.png"
-              }
-              alt="Profile"
-              className="shadow-lg border-2 border-cyan-500/30 rounded-2xl w-11 h-11 object-cover"
-            />
-          </div>
-        </header>
-
-        {/* Content */}
-        <main className="mx-auto p-6 max-w-7xl">
-
-          {/* Cart */}
+        {/* CONTENT */}
+        <main className="p-6 md:p-8 max-w-7xl mx-auto">
           {activeTab === "cart" && <CartPage />}
 
-          {/* Orders */}
           {activeTab === "orders" && <RecentOrders />}
 
-          {/* Overview */}
           {activeTab === "overview" && (
-            <>
-              {/* Hero */}
-              <div className="relative bg-gradient-to-br from-cyan-500/20 to-blue-700/20 shadow-xl mb-8 p-8 border border-cyan-500/20 rounded-3xl overflow-hidden">
+            <div className="space-y-8">
+              {/* HERO */}
+              <motion.div
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative overflow-hidden rounded-3xl border border-white/10 p-8 md:p-10"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(17,24,39,0.8), rgba(15,23,42,0.95))",
+                  backdropFilter: "blur(20px)",
+                }}
+              >
+                <div className="absolute right-[-60px] top-[-60px] w-72 h-72 bg-sky-500/10 rounded-full blur-[100px]" />
 
-                <div className="top-0 right-0 absolute bg-cyan-400 opacity-10 blur-3xl rounded-full w-52 h-52" />
+                <div className="flex flex-col md:flex-row justify-between gap-8 items-center">
+                  <div className="max-w-xl">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-400/20 mb-5">
+                      <TrendingUp
+                        size={14}
+                        className="text-sky-400"
+                      />
 
-                <div className="z-10 relative flex md:flex-row flex-col justify-between items-center gap-6">
+                      <span className="text-sky-400 text-xs font-semibold uppercase tracking-wide">
+                        Premium Dashboard
+                      </span>
+                    </div>
 
-                  <div>
-                    <h2 className="font-black text-white text-4xl leading-tight">
-                      Welcome Back,
+                    <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+                      Welcome back,
                       <br />
-                      {user?.name?.split(" ")[0]}
+                      <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                        {user?.name?.split(" ")[0] || "User"}
+                      </span>
                     </h2>
 
-                    <p className="mt-3 max-w-xl text-slate-300">
-                      Manage your orders, cart, profile and stay updated
-                      with your latest shopping activity.
+                    <p className="mt-5 text-white/40 leading-relaxed">
+                      Manage orders, track deliveries, and monitor
+                      all your shopping activities in one elegant
+                      dashboard.
                     </p>
 
-                    <div className="flex flex-wrap gap-3 mt-6">
-
+                    <div className="flex flex-wrap gap-4 mt-8">
                       <Link
                         href="/dashboard/customer/profile"
-                        className="bg-cyan-500 hover:bg-cyan-600 shadow-lg px-5 py-3 rounded-2xl font-semibold text-white transition-all"
+                        className="px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-500 font-semibold hover:scale-105 transition"
                       >
                         Edit Profile
                       </Link>
 
                       <button
                         onClick={() => setActiveTab("orders")}
-                        className="bg-white/10 hover:bg-white/20 px-5 py-3 rounded-2xl font-semibold text-white transition-all"
+                        className="px-6 py-3 rounded-2xl bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] transition"
                       >
                         View Orders
                       </button>
                     </div>
                   </div>
 
-                  <img
-                    src={
-                      user?.profilePic
-                        ? `http://localhost:3000/uploads/profile/${user.profilePic}`
-                        : "/no-image.png"
-                    }
-                    alt="Profile"
-                    className="shadow-2xl border-4 border-cyan-500/30 rounded-3xl w-40 h-40 object-cover"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full bg-sky-500/20 blur-3xl" />
+
+                    <img
+                      src={
+                        user?.profilePic
+                          ? `http://localhost:3000/uploads/profile/${user.profilePic}`
+                          : "/no-image.png"
+                      }
+                      alt="profile"
+                      className="relative w-36 h-36 md:w-44 md:h-44 rounded-3xl object-cover border border-white/10"
+                    />
+                  </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Stats */}
-              <div className="gap-5 grid grid-cols-1 md:grid-cols-3 mb-8">
-
-                {stats.map((stat) => (
-                  <div
+              {/* STATS */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {stats.map((stat, index) => (
+                  <motion.div
                     key={stat.label}
-                    className={`bg-[#0d1325] border ${stat.border} rounded-3xl p-6 shadow-lg hover:scale-[1.02] transition-all`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: index * 0.1,
+                    }}
+                    className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 hover:scale-[1.02] transition-all duration-300 shadow-[0_10px_40px_rgba(0,0,0,0.35)]"
                   >
-                    <div className="flex justify-between items-center">
+                    <div
+                      className={`absolute inset-0 opacity-10 bg-gradient-to-br ${stat.color}`}
+                    />
 
+                    <div className="relative flex items-center justify-between">
                       <div>
-                        <p className="text-slate-400 text-sm">
+                        <p className="text-white/40 text-sm">
                           {stat.label}
                         </p>
 
-                        <h2
-                          className={`text-4xl font-black mt-2 ${stat.color}`}
-                        >
+                        <h3 className="text-5xl font-bold mt-3">
                           {stat.value}
-                        </h2>
+                        </h3>
                       </div>
 
-                      <div className={`${stat.bg} p-4 rounded-2xl`}>
-                        <stat.icon
-                          size={26}
-                          className={stat.color}
-                        />
+                      <div
+                        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}
+                      >
+                        <stat.icon size={28} />
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
-              {/* Quick Actions */}
-              <div className="gap-5 grid grid-cols-1 md:grid-cols-4 mb-8">
+              {/* ANALYTICS */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* CARD */}
+                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">
+                      Monthly Activity
+                    </h3>
 
-                <button
-                  onClick={() => setActiveTab("cart")}
-                  className="bg-[#0d1325] hover:bg-[#131b31] shadow-lg p-5 border border-white/10 rounded-3xl text-left transition-all"
-                >
-                  <ShoppingCart className="mb-4 text-cyan-400" />
-                  <h3 className="font-bold text-lg">My Cart</h3>
-                  <p className="mt-1 text-slate-400 text-sm">
-                    View your shopping cart items
-                  </p>
-                </button>
+                    <TrendingUp
+                      size={18}
+                      className="text-sky-400"
+                    />
+                  </div>
 
-                <button
-                  onClick={() => setActiveTab("orders")}
-                  className="bg-[#0d1325] hover:bg-[#131b31] shadow-lg p-5 border border-white/10 rounded-3xl text-left transition-all"
-                >
-                  <Package className="mb-4 text-purple-400" />
-                  <h3 className="font-bold text-lg">Orders</h3>
-                  <p className="mt-1 text-slate-400 text-sm">
-                    Check all your orders
-                  </p>
-                </button>
+                  <p className="text-4xl font-bold mt-5">75%</p>
 
-                <Link
-                  href="/dashboard/customer/profile"
-                  className="bg-[#0d1325] hover:bg-[#131b31] shadow-lg p-5 border border-white/10 rounded-3xl transition-all"
-                >
-                  <User className="mb-4 text-emerald-400" />
-                  <h3 className="font-bold text-lg">Profile</h3>
-                  <p className="mt-1 text-slate-400 text-sm">
-                    Manage account information
-                  </p>
-                </Link>
+                  <div className="mt-6 w-full h-3 rounded-full bg-white/5 overflow-hidden">
+                    <div className="w-[75%] h-full bg-gradient-to-r from-sky-400 to-indigo-500 rounded-full" />
+                  </div>
+                </div>
 
-                <Link
-                  href="/dashboard/customer/complaint"
-                  className="bg-[#0d1325] hover:bg-[#131b31] shadow-lg p-5 border border-white/10 rounded-3xl transition-all"
-                >
-                  <Bell className="mb-4 text-yellow-400" />
-                  <h3 className="font-bold text-lg">
-                    Complaint
-                  </h3>
-                  <p className="mt-1 text-slate-400 text-sm">
-                    File a complaint easily
+                {/* CARD */}
+                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">
+                      Delivery Success
+                    </h3>
+
+                    <CheckCircle
+                      size={18}
+                      className="text-emerald-400"
+                    />
+                  </div>
+
+                  <p className="text-4xl font-bold mt-5">92%</p>
+
+                  <div className="mt-6 w-full h-3 rounded-full bg-white/5 overflow-hidden">
+                    <div className="w-[92%] h-full bg-gradient-to-r from-emerald-400 to-green-500 rounded-full" />
+                  </div>
+                </div>
+
+                {/* CARD */}
+                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">
+                      Pending Orders
+                    </h3>
+
+                    <Clock
+                      size={18}
+                      className="text-orange-400"
+                    />
+                  </div>
+
+                  <p className="text-4xl font-bold mt-5">
+                    {pendingCount}
                   </p>
-                </Link>
+
+                  <div className="mt-6 w-full h-3 rounded-full bg-white/5 overflow-hidden">
+                    <div className="w-[40%] h-full bg-gradient-to-r from-orange-400 to-amber-500 rounded-full" />
+                  </div>
+                </div>
               </div>
 
-              {/* Recent Orders */}
-              <div className="bg-[#0d1325] shadow-lg p-6 border border-white/10 rounded-3xl">
-                <div className="flex justify-between items-center mb-5">
+              {/* QUICK ACTIONS */}
+              <div>
+                <h2 className="text-lg font-semibold mb-5">
+                  Quick Actions
+                </h2>
 
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+                  {[
+                    {
+                      label: "My Cart",
+                      icon: ShoppingCart,
+                      color: "from-sky-500 to-cyan-400",
+                      action: () => setActiveTab("cart"),
+                    },
+                    {
+                      label: "Orders",
+                      icon: Package,
+                      color: "from-indigo-500 to-violet-500",
+                      action: () => setActiveTab("orders"),
+                    },
+                    {
+                      label: "Profile",
+                      icon: User,
+                      color: "from-emerald-500 to-green-400",
+                      href: "/dashboard/customer/profile",
+                    },
+                    {
+                      label: "Complaint",
+                      icon: MessageSquare,
+                      color: "from-orange-500 to-amber-400",
+                      href: "/dashboard/customer/complaint",
+                    },
+                  ].map((item) => {
+                    const content = (
+                      <>
+                        <div
+                          className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-5`}
+                        >
+                          <item.icon size={22} />
+                        </div>
+
+                        <h3 className="font-semibold">
+                          {item.label}
+                        </h3>
+
+                        <ChevronRight
+                          size={18}
+                          className="absolute top-6 right-6 text-white/20"
+                        />
+                      </>
+                    );
+
+                    const className =
+                      "relative rounded-3xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.05] hover:scale-[1.02] transition-all duration-300";
+
+                    return item.href ? (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className={className}
+                      >
+                        {content}
+                      </Link>
+                    ) : (
+                      <button
+                        key={item.label}
+                        onClick={item.action}
+                        className={className}
+                      >
+                        {content}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* RECENT ORDERS */}
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] overflow-hidden">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
                   <div>
-                    <h2 className="font-bold text-white text-xl">
+                    <h2 className="font-semibold text-lg">
                       Recent Orders
                     </h2>
 
-                    <p className="text-slate-400 text-sm">
-                      Latest activity from your account
+                    <p className="text-white/40 text-sm mt-1">
+                      Your latest purchases
                     </p>
                   </div>
 
                   <button
                     onClick={() => setActiveTab("orders")}
-                    className="flex items-center gap-1 font-semibold text-cyan-400 hover:text-cyan-300 text-sm transition"
+                    className="text-sky-400 hover:text-sky-300 flex items-center gap-1"
                   >
                     See all
                     <ChevronRight size={16} />
                   </button>
                 </div>
 
-                <RecentOrders />
+                <div className="p-6">
+                  <RecentOrders />
+                </div>
               </div>
-            </>
+            </div>
           )}
         </main>
       </div>
