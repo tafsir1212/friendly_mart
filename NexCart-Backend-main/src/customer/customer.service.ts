@@ -6,6 +6,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 // import { ProductEntity } from 'src/seller/product.entity';
 import { CartItem } from './cart-item.entity';
@@ -69,6 +70,10 @@ export class CustomerService {
 
     if (!user || !(await bcrypt.compare(body.password, user.password))) {
       throw new BadRequestException('Invalid email or password');
+    }
+
+    if (user.isBlocked) {
+      throw new UnauthorizedException('Your account has been blocked');
     }
 
     const payload = {

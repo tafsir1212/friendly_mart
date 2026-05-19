@@ -74,8 +74,8 @@ import { PusherModule } from './pusher/pusher.module';
         autoLoadEntities: true,
         synchronize: true,
         ssl: {
-          rejectUnauthorized: false,
-        },
+          rejectUnauthorized:false
+        }
       }),
     }),
 

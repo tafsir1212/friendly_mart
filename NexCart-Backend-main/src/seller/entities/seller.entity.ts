@@ -32,6 +32,9 @@ export class SellerEntity {
   @Column({ type: 'varchar', length: 255 })
   password!: string;
 
+  @Column({ default: false })
+  isBlocked!: boolean;
+
   @OneToMany(() => ProductEntity, (product) => product.seller)
   products!: ProductEntity[];
 

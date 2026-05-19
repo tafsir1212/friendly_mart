@@ -170,6 +170,10 @@ export class SellerService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    if (seller.isBlocked) {
+      throw new UnauthorizedException('Your account has been blocked');
+    }
+
     const payload = {
       sub: seller.id,
       email: seller.email,

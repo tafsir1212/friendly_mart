@@ -15,6 +15,9 @@ export class customerEntity {
   @Column()
   password!: string;
 
+  @Column({ default: false })
+  isBlocked!: boolean;
+
   @Column({ nullable: true })
   profilePic!: string;
 

@@ -231,8 +231,9 @@ export class ManagerService {
     });
     if (!customer) throw new NotFoundException('Customer not found');
 
-    // We add a soft-block by annotating via activity log
-    // (customerEntity doesn't have isBlocked, so we log the action)
+    customer.isBlocked = true;
+    await this.customerRepository.save(customer);
+
     await this.logActivity(
       managerId,
       managerName,
@@ -253,6 +254,9 @@ export class ManagerService {
       where: { id: customerId },
     });
     if (!customer) throw new NotFoundException('Customer not found');
+
+    customer.isBlocked = false;
+    await this.customerRepository.save(customer);
 
     await this.logActivity(
       managerId,
@@ -293,6 +297,9 @@ export class ManagerService {
     });
     if (!seller) throw new NotFoundException('Seller not found');
 
+    seller.isBlocked = true;
+    await this.sellerRepository.save(seller);
+
     await this.logActivity(
       managerId,
       managerName,
@@ -313,6 +320,9 @@ export class ManagerService {
       where: { id: sellerId },
     });
     if (!seller) throw new NotFoundException('Seller not found');
+
+    seller.isBlocked = false;
+    await this.sellerRepository.save(seller);
 
     await this.logActivity(
       managerId,
