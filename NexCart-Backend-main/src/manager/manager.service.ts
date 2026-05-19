@@ -27,6 +27,7 @@ import {
 } from './manager.dto';
 
 import { JwtService } from '@nestjs/jwt';
+import { PusherService } from '../pusher/pusher.service';
 
 @Injectable()
 export class ManagerService {
@@ -54,6 +55,8 @@ export class ManagerService {
     private sellerRepository: Repository<SellerEntity>,
 
     private readonly jwtService: JwtService,
+    private readonly pusherService: PusherService,
+
   ) {}
 
   // =====================================
@@ -471,6 +474,22 @@ export class ManagerService {
 
     order.status = status;
     const updated = await this.orderRepository.save(order);
+    await this.pusherService.trigger(
+ 
+  'order-channel',
+ 
+  'order-status-updated',
+ 
+  {
+
+    orderId: updated.id,
+ 
+    status: updated.status,
+
+  },
+
+);
+ 
 
     await this.logActivity(
       managerId,

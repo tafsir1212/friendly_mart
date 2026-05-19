@@ -244,6 +244,20 @@ export class CustomerService {
 
     // SAVE ORDER
     await this.orderRepo.save(order);
+
+    await this.pusherService.trigger(
+
+      'manager-channel',
+
+      'manager-new-order',
+
+      {
+        orderId: order.id,
+
+        message:
+          'New customer order placed',
+      },
+    );
     await this.pusherService.trigger(
       'seller-channel',
 
@@ -255,6 +269,7 @@ export class CustomerService {
         message: 'New order received',
       },
     );
+
     await this.pusherService.trigger(
       'admin-channel',
 

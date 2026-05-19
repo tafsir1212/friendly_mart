@@ -17,6 +17,7 @@ import { ManagerJwtStrategy } from './manager-jwt.strategy';
 import { Order } from 'src/customer/order.entity';
 import { customerEntity } from 'src/customer/customer.entity';
 import { SellerEntity } from 'src/seller/entities/seller.entity';
+import { PusherModule } from '../pusher/pusher.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SellerEntity } from 'src/seller/entities/seller.entity';
       customerEntity,
       SellerEntity,
     ]),
+    PusherModule,
   ],
   controllers: [ManagerController],
   providers: [ManagerService, ManagerJwtStrategy],
